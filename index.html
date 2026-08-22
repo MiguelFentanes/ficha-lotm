@@ -694,7 +694,7 @@
             });
         }
 
-        // --- GERAÇÃO DE FICHA FÍSICA / IMPRESSÃO EM BRANCO ---
+        // --- GERAÇÃO DE FICHA FÍSICA / IMPRESSÃO EM BRANCO (OTIMIZADA) ---
         function imprimirFichaFisica() {
             const printWindow = window.open('', '_blank');
             if (!printWindow) {
@@ -705,25 +705,25 @@
             let skillsHtml = '';
             SKILLS.forEach(skill => {
                 skillsHtml += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ccc; padding:2px 4px; font-size:10px;">
-                        <div>
-                            <span style="display:inline-block; width:10px; height:10px; border:1px solid #000; margin-right:4px;"></span>
-                            <strong>${skill.name}</strong> <span style="color:#666;">(${skill.attr})</span>
+                    <div class="skill-row">
+                        <div class="skill-label">
+                            <span class="checkbox-sq"></span>
+                            <span><strong>${skill.name}</strong> <span class="attr-tag">(${skill.attr})</span></span>
                         </div>
-                        <div style="font-weight:bold;">[ ____ ]</div>
+                        <div class="skill-val">[ &nbsp;&nbsp;&nbsp;&nbsp; ]</div>
                     </div>
                 `;
             });
 
             let habsHtml = '';
-            for (let i = 1; i <= 6; i++) {
+            for (let i = 1; i <= 5; i++) {
                 habsHtml += `
-                    <div style="border:1px solid #000; border-radius:4px; padding:6px; margin-bottom:6px; font-size:10px;">
-                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid #999; pb-2px; margin-bottom:4px; font-weight:bold;">
+                    <div class="hab-card">
+                        <div class="hab-head">
                             <span>Habilidade ${i}: ________________________</span>
                             <span>Custo/Tipo: ____________</span>
                         </div>
-                        <div style="height:35px; color:#aaa; italic">Efeito / Descrição:</div>
+                        <div class="hab-body">Efeito / Descrição:</div>
                     </div>
                 `;
             }
@@ -735,26 +735,148 @@
                     <meta charset="UTF-8">
                     <title>Ficha de Personagem - Lord of the Mysteries (Impressão)</title>
                     <style>
-                        @page { size: A4; margin: 8mm; }
-                        body { font-family: 'Courier New', Courier, monospace; color: #000; background: #fff; margin:0; padding:0; line-height:1.2; }
-                        .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 8px; }
-                        .header h1 { margin:0; font-size: 18px; text-transform: uppercase; font-family: serif; }
-                        .header p { margin:2px 0 0 0; font-size: 10px; font-style: italic; }
-                        .grid-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 8px; font-size: 11px; }
-                        .box-field { border: 1px solid #000; padding: 4px 6px; border-radius: 3px; }
-                        .box-title { font-size: 8px; text-transform: uppercase; font-weight: bold; display: block; color: #333; margin-bottom: 2px; }
-                        .status-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 8px; text-align: center; }
-                        .attr-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 8px; text-align: center; }
-                        .main-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-                        .section-title { font-family: serif; font-size: 11px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #000; margin-bottom: 4px; padding-bottom: 1px; }
-                        .photo-box { border: 1px dashed #000; height: 110px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 10px; color: #666; margin-bottom: 8px; }
-                        .line-area { border: 1px solid #000; border-radius: 3px; padding: 4px; height: 80px; font-size: 10px; }
+                        @page { size: A4 portrait; margin: 6mm 8mm; }
+                        * { box-sizing: border-box; }
+                        body { 
+                            font-family: 'Times New Roman', Times, serif; 
+                            color: #000; 
+                            background: #fff; 
+                            margin: 0; 
+                            padding: 0; 
+                            font-size: 10px; 
+                            line-height: 1.15; 
+                        }
+                        .header { 
+                            text-align: center; 
+                            border-bottom: 2px solid #000; 
+                            padding-bottom: 2px; 
+                            margin-bottom: 6px; 
+                        }
+                        .header h1 { 
+                            margin: 0; 
+                            font-size: 18px; 
+                            text-transform: uppercase; 
+                            letter-spacing: 1px;
+                        }
+                        .header p { 
+                            margin: 1px 0 0 0; 
+                            font-size: 9px; 
+                            font-style: italic; 
+                        }
+                        .box-field { 
+                            border: 1px solid #000; 
+                            padding: 3px 5px; 
+                            border-radius: 2px; 
+                        }
+                        .box-title { 
+                            font-size: 7.5px; 
+                            text-transform: uppercase; 
+                            font-weight: bold; 
+                            display: block; 
+                            color: #111; 
+                            margin-bottom: 2px; 
+                        }
+                        .grid-top { 
+                            display: grid; 
+                            grid-template-columns: 2fr 1.5fr 1.5fr; 
+                            gap: 5px; 
+                            margin-bottom: 5px; 
+                        }
+                        .status-grid, .attr-grid { 
+                            display: grid; 
+                            grid-template-columns: repeat(5, 1fr); 
+                            gap: 5px; 
+                            margin-bottom: 6px; 
+                            text-align: center; 
+                        }
+                        .main-layout { 
+                            display: grid; 
+                            grid-template-columns: 1fr 1fr; 
+                            gap: 10px; 
+                        }
+                        .section-title { 
+                            font-size: 10.5px; 
+                            font-weight: bold; 
+                            text-transform: uppercase; 
+                            border-bottom: 1.5px solid #000; 
+                            margin-bottom: 4px; 
+                            padding-bottom: 1px; 
+                        }
+                        
+                        /* Skills Styling */
+                        .skills-column {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            gap: 0 8px;
+                        }
+                        .skill-row { 
+                            display: flex; 
+                            justify-content: space-between; 
+                            align-items: center; 
+                            border-bottom: 1px dotted #888; 
+                            padding: 2px 0; 
+                            font-size: 9px; 
+                            white-space: nowrap; 
+                        }
+                        .skill-label { 
+                            display: flex; 
+                            align-items: center; 
+                            gap: 3px; 
+                        }
+                        .checkbox-sq { 
+                            width: 8px; 
+                            height: 8px; 
+                            border: 1px solid #000; 
+                            display: inline-block; 
+                        }
+                        .attr-tag { 
+                            color: #444; 
+                            font-size: 8px; 
+                        }
+                        .skill-val { 
+                            font-weight: bold; 
+                            font-family: monospace; 
+                            font-size: 8.5px; 
+                        }
+
+                        /* Cards de Habilidade */
+                        .hab-card { 
+                            border: 1px solid #000; 
+                            border-radius: 2px; 
+                            padding: 4px 6px; 
+                            margin-bottom: 5px; 
+                            font-size: 9px; 
+                        }
+                        .hab-head { 
+                            display: flex; 
+                            justify-content: space-between; 
+                            border-bottom: 1px solid #aaa; 
+                            padding-bottom: 2px; 
+                            margin-bottom: 3px; 
+                            font-weight: bold; 
+                        }
+                        .hab-body { 
+                            height: 28px; 
+                            color: #777; 
+                            font-style: italic; 
+                            font-size: 8.5px; 
+                        }
+
+                        /* Lined Text Areas */
+                        .lined-box {
+                            border: 1px solid #000;
+                            border-radius: 2px;
+                            padding: 4px 6px;
+                            background-image: repeating-linear-gradient(transparent, transparent 15px, #bbb 16px);
+                            line-height: 16px;
+                            font-size: 9px;
+                        }
                     </style>
                 </head>
                 <body>
                     <div class="header">
                         <h1>Lord of the Mysteries RPG</h1>
-                        <p>Ficha de Personagem</p>
+                        <p>Ficha de Personagem (Modelo Físico)</p>
                     </div>
 
                     <div class="grid-top">
@@ -766,7 +888,7 @@
                     <div class="status-grid">
                         <div class="box-field"><span class="box-title">VIDA (Total / Atual)</span> [ ____ / ____ ]</div>
                         <div class="box-field"><span class="box-title">SANIDADE (Total / Atual)</span> [ ____ / ____ ]</div>
-                        <div class="box-field"><span class="box-title">CLASSE DE ARMADURA (CA)</span> [ ____ ]</div>
+                        <div class="box-field"><span class="box-title">CA (Armadura)</span> [ ____ ]</div>
                         <div class="box-field"><span class="box-title">REE (Total / Atual)</span> [ ____ / ____ ]</div>
                         <div class="box-field"><span class="box-title">CORRUPÇÃO (%)</span> [ ____ % ]</div>
                     </div>
@@ -780,30 +902,32 @@
                     </div>
 
                     <div class="main-layout">
+                        <!-- Coluna da Esquerda -->
                         <div>
                             <div class="section-title">Perícias</div>
-                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0 6px;">
+                            <div class="skills-column">
                                 ${skillsHtml}
                             </div>
 
-                            <div style="margin-top:8px;">
-                                <div class="section-title">Aparência / Retrato</div>
-                                <div class="photo-box">Desenhe ou cole o retrato do personagem</div>
+                            <div style="margin-top: 10px;">
+                                <div class="section-title">Aparência & Descrição Visual</div>
+                                <div class="lined-box" style="height: 145px;"></div>
                             </div>
                         </div>
 
+                        <!-- Coluna da Direita -->
                         <div>
                             <div class="section-title">Habilidades Beyonder</div>
                             ${habsHtml}
 
-                            <div style="margin-top:4px;">
+                            <div style="margin-top: 4px;">
                                 <div class="section-title">Traumas & Mutações</div>
-                                <div class="line-area"></div>
+                                <div class="lined-box" style="height: 50px;"></div>
                             </div>
 
-                            <div style="margin-top:6px;">
+                            <div style="margin-top: 6px;">
                                 <div class="section-title">Pertences / Inventário</div>
-                                <div class="line-area" style="height:110px;"></div>
+                                <div class="lined-box" style="height: 110px;"></div>
                             </div>
                         </div>
                     </div>
