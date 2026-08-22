@@ -16,6 +16,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Font Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- html2pdf.js para geração de PDF no navegador -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Fauna+One&display=swap');
@@ -111,15 +113,21 @@
 </head>
 <body class="min-h-screen p-2 md:p-6">
 
-    <div class="max-w-5xl mx-auto bg-dark-card rounded-lg p-4 md:p-8 relative">
+    <div id="ficha-container" class="max-w-5xl mx-auto bg-dark-card rounded-lg p-4 md:p-8 relative">
         
-        <!-- Botões de Backup (Exportar e Importar) -->
-        <div class="flex flex-wrap justify-end gap-2 mb-4">
+        <!-- Botões de Ação (Exportar, Importar, PDF e WhatsApp) -->
+        <div class="flex flex-wrap justify-end gap-2 mb-4 data-html2canvas-ignore">
+            <button type="button" onclick="baixarPDF()" class="btn-stepper px-3 py-1.5 rounded text-xs font-bold flex items-center border-red-700 hover:border-red-500 bg-red-950/40">
+                <i class="fa-solid fa-file-pdf mr-1.5 text-red-400"></i> Baixar PDF
+            </button>
+            <button type="button" onclick="compartilharWhatsApp()" class="btn-stepper px-3 py-1.5 rounded text-xs font-bold flex items-center border-green-700 hover:border-green-500 bg-green-950/40">
+                <i class="fa-brands fa-whatsapp mr-1.5 text-green-400"></i> WhatsApp
+            </button>
             <button type="button" onclick="exportarFicha()" class="btn-stepper px-3 py-1.5 rounded text-xs font-bold flex items-center">
-                <i class="fa-solid fa-download mr-1.5"></i> Exportar Ficha
+                <i class="fa-solid fa-download mr-1.5"></i> Exportar JSON
             </button>
             <button type="button" onclick="document.getElementById('import-file').click()" class="btn-stepper px-3 py-1.5 rounded text-xs font-bold flex items-center">
-                <i class="fa-solid fa-upload mr-1.5"></i> Importar Ficha
+                <i class="fa-solid fa-upload mr-1.5"></i> Importar JSON
             </button>
             <input type="file" id="import-file" class="hidden" accept=".json" onchange="importarFicha(event)">
         </div>
@@ -154,7 +162,7 @@
             <div class="input-dark p-3 rounded border border-red-900">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-xs uppercase font-bold text-red-400"><i class="fa-solid fa-heart mr-1"></i> Vida</span>
-                    <button type="button" onclick="recalcularPV(true)" title="Recalcular vida base" class="text-[10px] text-gray-400 hover:text-white"><i class="fa-solid fa-rotate-right"></i></button>
+                    <button type="button" onclick="recalcularPV(true)" title="Recalcular vida base" class="text-[10px] text-gray-400 hover:text-white data-html2canvas-ignore"><i class="fa-solid fa-rotate-right"></i></button>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -172,7 +180,7 @@
             <div class="input-dark p-3 rounded border border-purple-900">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-xs uppercase font-bold text-purple-400"><i class="fa-solid fa-brain mr-1"></i> Sanidade</span>
-                    <button type="button" onclick="recalcularSAN(true)" title="Recalcular sanidade base" class="text-[10px] text-gray-400 hover:text-white"><i class="fa-solid fa-rotate-right"></i></button>
+                    <button type="button" onclick="recalcularSAN(true)" title="Recalcular sanidade base" class="text-[10px] text-gray-400 hover:text-white data-html2canvas-ignore"><i class="fa-solid fa-rotate-right"></i></button>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -190,7 +198,7 @@
             <div class="input-dark p-3 rounded border border-yellow-900">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-xs uppercase font-bold text-yellow-400"><i class="fa-solid fa-shield mr-1"></i> CA</span>
-                    <button type="button" onclick="recalcularCA(true)" title="Recalcular CA base" class="text-[10px] text-gray-400 hover:text-white"><i class="fa-solid fa-rotate-right"></i></button>
+                    <button type="button" onclick="recalcularCA(true)" title="Recalcular CA base" class="text-[10px] text-gray-400 hover:text-white data-html2canvas-ignore"><i class="fa-solid fa-rotate-right"></i></button>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -221,7 +229,7 @@
         </div>
 
         <!-- Abas Principais -->
-        <div class="flex border-b border-[#4a3a20] mb-6 overflow-x-auto">
+        <div class="flex border-b border-[#4a3a20] mb-6 overflow-x-auto data-html2canvas-ignore">
             <button class="tab-btn active px-4 py-2 text-xs md:text-sm font-bold uppercase rounded-t tracking-wider whitespace-nowrap" onclick="switchTab(event, 'tab-atributos')">
                 <i class="fa-solid fa-shield-halved mr-1"></i> Atributos e Perícias
             </button>
@@ -242,9 +250,9 @@
                 <div class="input-dark p-2 rounded border attr-FOR text-center">
                     <span class="attr-badge px-2 py-0.5 rounded text-[10px] font-bold border block mb-1">FOR</span>
                     <div class="flex justify-center items-center space-x-1 mb-1">
-                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-for-val', -1)">-</button>
+                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold data-html2canvas-ignore" onclick="changeValue('attr-for-val', -1)">-</button>
                         <input type="number" id="attr-for-val" value="10" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs" oninput="calcularTudo()">
-                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-for-val', 1)">+</button>
+                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold data-html2canvas-ignore" onclick="changeValue('attr-for-val', 1)">+</button>
                     </div>
                     <span id="mod-for" class="text-[11px] font-bold text-amber-300 block">Mod: +0</span>
                 </div>
@@ -253,9 +261,9 @@
                 <div class="input-dark p-2 rounded border attr-AGI text-center">
                     <span class="attr-badge px-2 py-0.5 rounded text-[10px] font-bold border block mb-1">AGI</span>
                     <div class="flex justify-center items-center space-x-1 mb-1">
-                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-agi-val', -1)">-</button>
+                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold data-html2canvas-ignore" onclick="changeValue('attr-agi-val', -1)">-</button>
                         <input type="number" id="attr-agi-val" value="10" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs" oninput="calcularTudo()">
-                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-agi-val', 1)">+</button>
+                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold data-html2canvas-ignore" onclick="changeValue('attr-agi-val', 1)">+</button>
                     </div>
                     <span id="mod-agi" class="text-[11px] font-bold text-amber-300 block">Mod: +0</span>
                 </div>
@@ -264,9 +272,9 @@
                 <div class="input-dark p-2 rounded border attr-INT text-center">
                     <span class="attr-badge px-2 py-0.5 rounded text-[10px] font-bold border block mb-1">INT</span>
                     <div class="flex justify-center items-center space-x-1 mb-1">
-                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-int-val', -1)">-</button>
+                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold data-html2canvas-ignore" onclick="changeValue('attr-int-val', -1)">-</button>
                         <input type="number" id="attr-int-val" value="10" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs" oninput="calcularTudo()">
-                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-int-val', 1)">+</button>
+                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold data-html2canvas-ignore" onclick="changeValue('attr-int-val', 1)">+</button>
                     </div>
                     <span id="mod-int" class="text-[11px] font-bold text-amber-300 block">Mod: +0</span>
                 </div>
@@ -275,9 +283,9 @@
                 <div class="input-dark p-2 rounded border attr-PRE text-center">
                     <span class="attr-badge px-2 py-0.5 rounded text-[10px] font-bold border block mb-1">PRE</span>
                     <div class="flex justify-center items-center space-x-1 mb-1">
-                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-pre-val', -1)">-</button>
+                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold data-html2canvas-ignore" onclick="changeValue('attr-pre-val', -1)">-</button>
                         <input type="number" id="attr-pre-val" value="10" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs" oninput="calcularTudo()">
-                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-pre-val', 1)">+</button>
+                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold data-html2canvas-ignore" onclick="changeValue('attr-pre-val', 1)">+</button>
                     </div>
                     <span id="mod-pre" class="text-[11px] font-bold text-amber-300 block">Mod: +0</span>
                 </div>
@@ -286,9 +294,9 @@
                 <div class="input-dark p-2 rounded border attr-VIG text-center col-span-2 md:col-span-1">
                     <span class="attr-badge px-2 py-0.5 rounded text-[10px] font-bold border block mb-1">VIG</span>
                     <div class="flex justify-center items-center space-x-1 mb-1">
-                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-vig-val', -1)">-</button>
+                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold data-html2canvas-ignore" onclick="changeValue('attr-vig-val', -1)">-</button>
                         <input type="number" id="attr-vig-val" value="10" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs" oninput="calcularTudo()">
-                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-vig-val', 1)">+</button>
+                        <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold data-html2canvas-ignore" onclick="changeValue('attr-vig-val', 1)">+</button>
                     </div>
                     <span id="mod-vig" class="text-[11px] font-bold text-amber-300 block">Mod: +0</span>
                 </div>
@@ -335,13 +343,12 @@
 
         <!-- Rodapé com Crédito do Criador -->
         <footer class="mt-8 pt-4 border-t border-[#9a783e]/30 text-center text-xs text-[#8a7350]">
-            Ficha por <span class="font-bold text-[#fceabb]">Lucas Fuskas</span>[cite: 1]
+            Ficha por <span class="font-bold text-[#fceabb]">Lucas Fuskas</span>
         </footer>
     </div>
 
     <!-- Scripts de Funcionalidade -->
     <script>
-        // Lista Completa de Perícias e seus Atributos Base
         const SKILLS = [
             { id: 'atletismo', name: 'Atletismo', attr: 'FOR' },
             { id: 'luta', name: 'Luta', attr: 'FOR' },
@@ -394,7 +401,6 @@
             el.dispatchEvent(new Event('input'));
         }
 
-        // Tabela de Modificadores: Math.floor((Atributo - 10) / 2)
         function getMod(val) {
             let num = parseInt(val, 10);
             if (isNaN(num)) return 0;
@@ -461,7 +467,6 @@
         }
 
         function calcularTudo() {
-            // 1. Modificadores dos Atributos
             const mods = {
                 FOR: getMod(document.getElementById('attr-for-val').value),
                 AGI: getMod(document.getElementById('attr-agi-val').value),
@@ -470,19 +475,16 @@
                 VIG: getMod(document.getElementById('attr-vig-val').value)
             };
 
-            // Atualiza visualmente os badges de Modificador nos Atributos
             document.getElementById('mod-for').innerText = `Mod: ${formatMod(mods.FOR)}`;
             document.getElementById('mod-agi').innerText = `Mod: ${formatMod(mods.AGI)}`;
             document.getElementById('mod-int').innerText = `Mod: ${formatMod(mods.INT)}`;
             document.getElementById('mod-pre').innerText = `Mod: ${formatMod(mods.PRE)}`;
             document.getElementById('mod-vig').innerText = `Mod: ${formatMod(mods.VIG)}`;
 
-            // 2. Status Derivados
             recalcularPV();
             recalcularSAN();
             recalcularCA();
 
-            // 3. Perícias
             SKILLS.forEach(skill => {
                 const trEl = document.getElementById(`per-${skill.id}-tr`);
                 const outrosEl = document.getElementById(`per-${skill.id}-outros`);
@@ -541,6 +543,102 @@
             }
         }
 
+        // --- GERAÇÃO DE PDF E COMPARTILHAMENTO ---
+        function prepararVisaoCompleta() {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.remove('hidden'));
+        }
+
+        function restaurarVisaoAbas() {
+            const contents = document.querySelectorAll('.tab-content');
+            const activeTab = document.querySelector('.tab-btn.active');
+            contents.forEach(c => c.classList.add('hidden'));
+            
+            if (activeTab) {
+                const onclickAttr = activeTab.getAttribute('onclick');
+                const match = onclickAttr ? onclickAttr.match(/'([^']+)'/) : null;
+                if (match) {
+                    document.getElementById(match[1]).classList.remove('hidden');
+                    return;
+                }
+            }
+            document.getElementById('tab-atributos').classList.remove('hidden');
+        }
+
+        function baixarPDF() {
+            const nameInput = document.getElementById('char-personagem');
+            const charName = (nameInput && nameInput.value.trim() !== '') ? nameInput.value.trim().replace(/\s+/g, '_') : 'ficha_lotm';
+            const element = document.getElementById('ficha-container');
+
+            prepararVisaoCompleta();
+
+            const opt = {
+                margin:       [0.2, 0.2, 0.2, 0.2],
+                filename:     `${charName}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#080a0f' },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                restaurarVisaoAbas();
+            }).catch(() => {
+                restaurarVisaoAbas();
+            });
+        }
+
+        async function compartilharWhatsApp() {
+            const nameInput = document.getElementById('char-personagem');
+            const charName = nameInput ? nameInput.value.trim() : 'Personagem';
+            const seqInput = document.getElementById('char-sequencia');
+            const seq = seqInput ? seqInput.value.trim() : 'Sequência não informada';
+            const pv = document.getElementById('vida-atual')?.value || document.getElementById('vida-total')?.value || '12';
+            const san = document.getElementById('sanidade-atual')?.value || document.getElementById('sanidade-total')?.value || '10';
+
+            const element = document.getElementById('ficha-container');
+
+            // 1. Tenta compartilhamento nativo do arquivo PDF (Celular/Web Share API)
+            if (navigator.canShare && typeof html2pdf !== 'undefined') {
+                try {
+                    prepararVisaoCompleta();
+
+                    const opt = {
+                        margin: [0.2, 0.2, 0.2, 0.2],
+                        filename: `${charName}_Ficha.pdf`,
+                        image: { type: 'jpeg', quality: 0.95 },
+                        html2canvas: { scale: 1.5, useCORS: true, backgroundColor: '#080a0f' },
+                        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+                    };
+
+                    const pdfWorker = html2pdf().set(opt).from(element);
+                    const pdfBlob = await pdfWorker.output('blob');
+                    restaurarVisaoAbas();
+
+                    const file = new File([pdfBlob], `${charName}_Ficha.pdf`, { type: 'application/pdf' });
+
+                    if (navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: `Ficha de ${charName}`,
+                            text: `Ficha do personagem ${charName} (${seq})`
+                        });
+                        return;
+                    }
+                } catch (err) {
+                    restaurarVisaoAbas();
+                }
+            }
+
+            // 2. Fallback: Envia mensagem formatada direta para o WhatsApp com resumo dos status
+            const texto = `*Ficha de RPG - Lord of the Mysteries*%0A` +
+                          `👤 *Personagem:* ${encodeURIComponent(charName)}%0A` +
+                          `🔮 *Sequência:* ${encodeURIComponent(seq)}%0A` +
+                          `❤️ *PV:* ${encodeURIComponent(pv)}%0A` +
+                          `🧠 *Sanidade:* ${encodeURIComponent(san)}`;
+
+            window.open(`https://api.whatsapp.com/send?text=${texto}`, '_blank');
+        }
+
         // --- SALVAMENTO E CARREGAMENTO AUTOMÁTICO ---
         document.addEventListener('input', (e) => {
             if (!e.target.id) return;
@@ -560,12 +658,10 @@
         window.addEventListener('DOMContentLoaded', () => {
             renderSkills();
 
-            // Restaura estado manual
             manualFlags.pv = localStorage.getItem('manual_pv') === 'true';
             manualFlags.san = localStorage.getItem('manual_san') === 'true';
             manualFlags.ca = localStorage.getItem('manual_ca') === 'true';
 
-            // Carrega valores salvos
             document.querySelectorAll('input, textarea, select').forEach(el => {
                 if (!el.id) return;
                 const saved = localStorage.getItem('ficha_lotm_' + el.id);
@@ -582,7 +678,7 @@
             calcularTudo();
         });
 
-        // --- EXPORTAR E IMPORTAR FICHA (BACKUP JSON) ---
+        // --- EXPORTAR E IMPORTAR FICHA (JSON) ---
         function exportarFicha() {
             const data = {};
             document.querySelectorAll('input, textarea, select').forEach(el => {
@@ -640,7 +736,6 @@
             reader.readAsText(file);
         }
 
-        // Registrar Service Worker para PWA (Offline)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(() => {});
