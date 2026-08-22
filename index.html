@@ -16,9 +16,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Font Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- html2pdf.js para geração de PDF no navegador -->
+    <!-- html2pdf.js para geração de PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- pdf-lib para leitura e manipulação de metadados do PDF -->
+    <!-- pdf-lib para manipulação de metadados do PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     
     <style>
@@ -59,7 +59,6 @@
             box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
 
-        /* Removendo setas nativas do input number */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -96,7 +95,6 @@
             transform: translateY(0) scale(0.94);
         }
 
-        /* Estilos de Cores de Atributos */
         .attr-FOR { border-color: rgba(239, 68, 68, 0.6); }
         .attr-FOR .attr-badge { background-color: rgba(127, 29, 29, 0.8); color: #fca5a5; border-color: #ef4444; }
 
@@ -117,7 +115,7 @@
 
     <div id="ficha-container" class="max-w-5xl mx-auto bg-dark-card rounded-lg p-4 md:p-8 relative">
         
-        <!-- Botões de Ação (Exportar, Importar, PDF e WhatsApp) -->
+        <!-- Botões de Ação -->
         <div class="flex flex-wrap justify-end gap-2 mb-4 data-html2canvas-ignore">
             <button type="button" onclick="baixarPDF()" class="btn-stepper px-3 py-1.5 rounded text-xs font-bold flex items-center border-red-700 hover:border-red-500 bg-red-950/40">
                 <i class="fa-solid fa-file-pdf mr-1.5 text-red-400"></i> Baixar PDF
@@ -154,7 +152,7 @@
             </div>
             <div>
                 <label for="char-sequencia" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Sequência</label>
-                <input type="text" id="char-sequencia" class="input-dark w-full p-2 rounded text-sm" placeholder="Ex: Sequência 9 - Louco">
+                <input type="text" id="char-sequencia" class="input-dark w-full p-2 rounded text-sm" placeholder="Ex: Sequência 9 - Vidente">
             </div>
         </div>
 
@@ -196,7 +194,7 @@
                 </div>
             </div>
 
-            <!-- CA (Classe de Armadura / Defesa Passiva) -->
+            <!-- CA -->
             <div class="input-dark p-3 rounded border border-yellow-900">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-xs uppercase font-bold text-yellow-400"><i class="fa-solid fa-shield mr-1"></i> CA</span>
@@ -204,7 +202,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <span class="text-[10px] text-gray-400 block" title="Bônus de Equipamento/Outros">Equip</span>
+                        <span class="text-[10px] text-gray-400 block">Equip</span>
                         <input type="number" id="ca-equip" class="input-dark w-full text-center py-1 rounded font-bold text-sm" placeholder="0" oninput="calcularTudo()">
                     </div>
                     <div>
@@ -214,7 +212,7 @@
                 </div>
             </div>
 
-            <!-- REE (Espiritualidade) -->
+            <!-- REE -->
             <div class="input-dark p-3 rounded border border-blue-900">
                 <span class="block text-xs uppercase font-bold text-blue-400 mb-1"><i class="fa-solid fa-wand-sparkles mr-1"></i> REE</span>
                 <div class="grid grid-cols-2 gap-2">
@@ -235,17 +233,19 @@
             <button class="tab-btn active px-4 py-2 text-xs md:text-sm font-bold uppercase rounded-t tracking-wider whitespace-nowrap" onclick="switchTab(event, 'tab-atributos')">
                 <i class="fa-solid fa-shield-halved mr-1"></i> Atributos e Perícias
             </button>
+            <button class="tab-btn px-4 py-2 text-xs md:text-sm font-bold uppercase rounded-t tracking-wider whitespace-nowrap" onclick="switchTab(event, 'tab-habilidades')">
+                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Habilidades Beyonder
+            </button>
             <button class="tab-btn px-4 py-2 text-xs md:text-sm font-bold uppercase rounded-t tracking-wider whitespace-nowrap" onclick="switchTab(event, 'tab-detalhes')">
-                <i class="fa-solid fa-user-gear mr-1"></i> Detalhes & Aparência
+                <i class="fa-solid fa-user-gear mr-1"></i> Aparência & Foto
             </button>
             <button class="tab-btn px-4 py-2 text-xs md:text-sm font-bold uppercase rounded-t tracking-wider whitespace-nowrap" onclick="switchTab(event, 'tab-anotacoes')">
                 <i class="fa-solid fa-book-open mr-1"></i> Pertences & Notas
             </button>
         </div>
 
-        <!-- Conteúdo 1: Atributos e Perícias -->
+        <!-- Aba 1: Atributos e Perícias -->
         <div id="tab-atributos" class="tab-content">
-            <!-- Atributos -->
             <h2 class="cinzel text-sm font-bold text-[#d4af37] uppercase mb-3"><i class="fa-solid fa-star mr-1"></i> Atributos Base</h2>
             <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
                 <!-- Força -->
@@ -304,34 +304,96 @@
                 </div>
             </div>
 
-            <!-- Perícias -->
             <div class="flex justify-between items-center mb-3">
                 <h2 class="cinzel text-sm font-bold text-[#d4af37] uppercase"><i class="fa-solid fa-list-check mr-1"></i> Perícias</h2>
                 <span class="text-[10px] text-gray-400 italic">Treinada = +2 nos testes</span>
             </div>
             
-            <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-                <!-- Gerado Dinamicamente via JavaScript -->
+            <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs"></div>
+        </div>
+
+        <!-- Aba 2: Habilidades Beyonder & Perda de Controle -->
+        <div id="tab-habilidades" class="tab-content hidden space-y-6">
+            <!-- Gerenciador de Habilidades da Sequência -->
+            <div>
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="cinzel text-sm font-bold text-[#d4af37] uppercase"><i class="fa-solid fa-scroll mr-1.5"></i> Habilidades de Sequência</h2>
+                    <button type="button" onclick="adicionarHabilidade()" class="btn-stepper px-2.5 py-1 rounded text-xs font-bold flex items-center data-html2canvas-ignore">
+                        <i class="fa-solid fa-plus mr-1 text-green-400"></i> Nova Habilidade
+                    </button>
+                </div>
+
+                <div id="habilidades-list" class="space-y-3">
+                    <!-- Cards adicionados via JS -->
+                </div>
+            </div>
+
+            <!-- Painel de Perda de Controle & Corrupção -->
+            <div class="border-t border-[#9a783e]/30 pt-4">
+                <h2 class="cinzel text-sm font-bold text-red-400 uppercase mb-3"><i class="fa-solid fa-biohazard mr-1.5"></i> Perda de Controle & Corrupção</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                    <div class="input-dark p-2.5 rounded border border-red-900/80">
+                        <label for="corrupcao-val" class="block text-[11px] font-bold text-red-300 uppercase mb-1">Nível de Corrupção (%)</label>
+                        <input type="text" id="corrupcao-val" class="input-dark w-full p-1.5 rounded text-xs text-center font-bold text-red-200" placeholder="0%">
+                    </div>
+                    <div class="input-dark p-2.5 rounded border border-purple-900/80 md:col-span-2">
+                        <label for="traumas-text" class="block text-[11px] font-bold text-purple-300 uppercase mb-1">Traumas Psicológicos & Mutações</label>
+                        <input type="text" id="traumas-text" class="input-dark w-full p-1.5 rounded text-xs" placeholder="Ex: Alucinações leves, fobia de espelhos...">
+                    </div>
+                </div>
+
+                <!-- Regras do Livro de Regras -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div class="bg-red-950/20 border border-red-800/50 p-3 rounded text-red-200/90 space-y-1">
+                        <h3 class="font-bold text-red-400 uppercase flex items-center"><i class="fa-solid fa-skull mr-1.5"></i> Perda de Controle</h3>
+                        <p class="text-[11px]">Se o teste for <strong>menor que a CD</strong>, o personagem falha. <span class="text-red-400 font-bold">Não há cura, não há volta.</span></p>
+                        <ul class="list-disc list-inside text-[11px] space-y-0.5 text-red-300/80 pt-1">
+                            <li><strong>O Colapso:</strong> Mutação instantânea em Criatura Mística Irracional.</li>
+                            <li><strong>Destino:</strong> Jogador perde a ficha e vira NPC hostil.</li>
+                            <li><strong>Trauma:</strong> Aliados próximos testam SAN (CD 15).</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-purple-950/20 border border-purple-800/50 p-3 rounded text-purple-200/90 space-y-1">
+                        <h3 class="font-bold text-purple-400 uppercase flex items-center"><i class="fa-solid fa-burst mr-1.5"></i> Falha Crítica (1 Natural)</h3>
+                        <p class="text-[11px]">A perda de controle é explosiva e devastadora no plano espiritual.</p>
+                        <ul class="list-disc list-inside text-[11px] space-y-0.5 text-purple-300/80 pt-1">
+                            <li><strong>Explosão Espiritual:</strong> Todos num raio de 9 metros sofrem <strong>2d10 de dano espiritual</strong>.</li>
+                            <li>Todos atingidos devem realizar um teste contra <strong>Corrupção</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Conteúdo 2: Detalhes & Aparência -->
+        <!-- Aba 3: Aparência & Foto Local -->
         <div id="tab-detalhes" class="tab-content hidden space-y-4">
             <div>
-                <label class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Aparência (URL da Imagem)</label>
-                <input type="text" id="aparencia-url" class="input-dark w-full p-2 rounded text-sm mb-2" placeholder="Cole aqui o link de uma imagem da internet (http...)" oninput="updateImagePreview()">
+                <label class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Foto do Personagem</label>
                 
-                <div id="aparencia-box" class="w-full h-64 border-2 border-dashed border-[#8a7350] rounded flex flex-col items-center justify-center text-center p-4 bg-black/40 overflow-hidden">
+                <div class="flex flex-col md:flex-row gap-2 mb-3 data-html2canvas-ignore">
+                    <button type="button" onclick="document.getElementById('aparencia-file').click()" class="btn-stepper px-3 py-2 rounded text-xs font-bold flex items-center justify-center">
+                        <i class="fa-solid fa-file-image mr-1.5 text-amber-400"></i> Selecionar Foto do Dispositivo
+                    </button>
+                    <input type="file" id="aparencia-file" accept="image/*" class="hidden" onchange="carregarImagemLocal(event)">
+                    
+                    <input type="text" id="aparencia-url" class="input-dark flex-1 p-2 rounded text-xs" placeholder="Ou cole o link de uma imagem da internet (http...)" oninput="updateImagePreview()">
+                </div>
+
+                <input type="hidden" id="aparencia-base64">
+
+                <div id="aparencia-box" class="w-full h-80 border-2 border-dashed border-[#8a7350] rounded flex flex-col items-center justify-center text-center p-4 bg-black/40 overflow-hidden relative">
                     <img id="aparencia-img" src="" alt="Aparência" class="hidden max-h-full max-w-full object-contain rounded">
                     <p id="aparencia-placeholder" class="text-xs text-[#8a7350] italic">
-                        <i class="fa-solid fa-image text-2xl block mb-2"></i>
-                        Insira a URL da imagem acima para visualizar o retrato do personagem
+                        <i class="fa-solid fa-image text-3xl block mb-2"></i>
+                        Envie uma foto do seu dispositivo ou insira uma URL acima para visualizar o retrato.
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Conteúdo 3: Pertences & Notas -->
+        <!-- Aba 4: Pertences & Notas -->
         <div id="tab-anotacoes" class="tab-content hidden space-y-4">
             <div>
                 <label for="pertences-text" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Pertences / Inventário</label>
@@ -343,13 +405,11 @@
             </div>
         </div>
 
-        <!-- Rodapé com Crédito do Criador -->
         <footer class="mt-8 pt-4 border-t border-[#9a783e]/30 text-center text-xs text-[#8a7350]">
             Ficha por <span class="font-bold text-[#fceabb]">Lucas Fuskas</span>
         </footer>
     </div>
 
-    <!-- Scripts de Funcionalidade -->
     <script>
         const SKILLS = [
             { id: 'atletismo', name: 'Atletismo', attr: 'FOR' },
@@ -529,13 +589,55 @@
             });
         }
 
+        // --- GERENCIADOR DE HABILIDADES BEYONDER ---
+        function adicionarHabilidade(nome = '', custo = '', desc = '') {
+            const container = document.getElementById('habilidades-list');
+            if (!container) return;
+
+            const id = 'hab_' + Date.now() + Math.random().toString(36).substr(2, 4);
+            const card = document.createElement('div');
+            card.className = 'input-dark p-3 rounded border border-amber-900/60 flex flex-col gap-2 relative hab-card';
+            card.id = id;
+            card.innerHTML = `
+                <div class="flex justify-between gap-2">
+                    <input type="text" placeholder="Nome da Habilidade (Ex: Adagas de Papel)" value="${nome}" class="input-dark p-1.5 rounded text-xs font-bold text-amber-300 w-1/2 hab-nome" oninput="salvarEstadoGeral()">
+                    <input type="text" placeholder="Custo/Tipo (Ex: 15% REE - Ação)" value="${custo}" class="input-dark p-1.5 rounded text-xs text-amber-200 w-1/2 hab-custo" oninput="salvarEstadoGeral()">
+                    <button type="button" onclick="document.getElementById('${id}').remove(); salvarEstadoGeral();" class="text-red-400 hover:text-red-200 text-xs px-2 data-html2canvas-ignore" title="Excluir Habilidade">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+                <textarea placeholder="Descrição do efeito, dano ou bônus..." class="input-dark p-1.5 rounded text-xs hab-desc" rows="2" oninput="salvarEstadoGeral()">${desc}</textarea>
+            `;
+            container.appendChild(card);
+            salvarEstadoGeral();
+        }
+
+        // --- MANIPULAÇÃO DE FOTO LOCAL ---
+        function carregarImagemLocal(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64 = e.target.result;
+                    document.getElementById('aparencia-base64').value = base64;
+                    document.getElementById('aparencia-url').value = ''; 
+                    localStorage.setItem('ficha_lotm_aparencia-base64', base64);
+                    updateImagePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
         function updateImagePreview() {
+            const base64Input = document.getElementById('aparencia-base64');
             const urlInput = document.getElementById('aparencia-url');
             const img = document.getElementById('aparencia-img');
             const placeholder = document.getElementById('aparencia-placeholder');
 
-            if (urlInput && urlInput.value.trim() !== '') {
-                img.src = urlInput.value;
+            const imgSrc = (base64Input && base64Input.value) ? base64Input.value : (urlInput ? urlInput.value.trim() : '');
+
+            if (imgSrc !== '') {
+                img.src = imgSrc;
                 img.classList.remove('hidden');
                 placeholder.classList.add('hidden');
             } else if (img && placeholder) {
@@ -549,11 +651,22 @@
         function obterDadosFicha() {
             const data = {};
             document.querySelectorAll('input, textarea, select').forEach(el => {
-                if (el.id) {
+                if (el.id && el.type !== 'file') {
                     data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
                 }
             });
             data['manualFlags'] = manualFlags;
+
+            const habList = [];
+            document.querySelectorAll('#habilidades-list .hab-card').forEach(card => {
+                habList.push({
+                    nome: card.querySelector('.hab-nome')?.value || '',
+                    custo: card.querySelector('.hab-custo')?.value || '',
+                    desc: card.querySelector('.hab-desc')?.value || ''
+                });
+            });
+            data['habilidadesList'] = habList;
+
             return data;
         }
 
@@ -564,7 +677,7 @@
             }
 
             Object.keys(data).forEach(id => {
-                if (id === 'manualFlags') return;
+                if (id === 'manualFlags' || id === 'habilidadesList') return;
                 const el = document.getElementById(id);
                 if (el) {
                     if (el.type === 'checkbox') {
@@ -576,12 +689,31 @@
                     }
                 }
             });
+
+            const container = document.getElementById('habilidades-list');
+            if (container) {
+                container.innerHTML = '';
+                if (data.habilidadesList && Array.isArray(data.habilidadesList)) {
+                    data.habilidadesList.forEach(h => adicionarHabilidade(h.nome, h.custo, h.desc));
+                }
+            }
             
             updateImagePreview();
             calcularTudo();
         }
 
-        // --- GERAÇÃO DE PDF E COMPARTILHAMENTO ---
+        function salvarEstadoGeral() {
+            const data = obterDadosFicha();
+            Object.keys(data).forEach(k => {
+                if (typeof data[k] === 'object') {
+                    localStorage.setItem('ficha_lotm_' + k, JSON.stringify(data[k]));
+                } else {
+                    localStorage.setItem('ficha_lotm_' + k, data[k]);
+                }
+            });
+        }
+
+        // --- GERAÇÃO DE PDF E EXPORTAÇÃO ---
         function prepararVisaoCompleta() {
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(c => c.classList.remove('hidden'));
@@ -621,7 +753,6 @@
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
 
-            // Injeta o JSON codificado nos metadados (Subject) do documento PDF
             html2pdf().set(opt).from(element).toPdf().get('pdf').then((pdf) => {
                 pdf.setProperties({
                     title: `Ficha RPG - ${charName}`,
@@ -684,20 +815,10 @@
             window.open(`https://api.whatsapp.com/send?text=${texto}`, '_blank');
         }
 
-        // --- SALVAMENTO E CARREGAMENTO AUTOMÁTICO NO NAVEGADOR ---
+        // --- CARREGAMENTO INICIAL ---
         document.addEventListener('input', (e) => {
             if (!e.target.id) return;
-            if (e.target.type === 'checkbox') {
-                localStorage.setItem('ficha_lotm_' + e.target.id, e.target.checked);
-            } else if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
-                localStorage.setItem('ficha_lotm_' + e.target.id, e.target.value);
-            }
-        });
-
-        document.addEventListener('change', (e) => {
-            if (e.target.id && e.target.type === 'checkbox') {
-                localStorage.setItem('ficha_lotm_' + e.target.id, e.target.checked);
-            }
+            salvarEstadoGeral();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -719,11 +840,20 @@
                 }
             });
 
+            const habSalvas = localStorage.getItem('ficha_lotm_habilidadesList');
+            if (habSalvas) {
+                try {
+                    const list = JSON.parse(habSalvas);
+                    if (Array.isArray(list)) {
+                        list.forEach(h => adicionarHabilidade(h.nome, h.custo, h.desc));
+                    }
+                } catch(e){}
+            }
+
             updateImagePreview();
             calcularTudo();
         });
 
-        // --- EXPORTAR E IMPORTAR FICHA (JSON OU PDF) ---
         function exportarFicha() {
             const data = obterDadosFicha();
             const nameInput = document.getElementById('char-personagem');
@@ -744,22 +874,20 @@
 
             try {
                 if (file.name.endsWith('.pdf') || file.type === 'application/pdf') {
-                    // Tenta extrair o JSON dos metadados do PDF com pdf-lib
                     const arrayBuffer = await file.arrayBuffer();
                     const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
                     const subjectMetadata = pdfDoc.getSubject();
 
                     if (!subjectMetadata) {
-                        alert("Este arquivo PDF não contém dados de ficha embutidos.");
+                        alert("Este arquivo PDF não contém dados de ficha salvos.");
                         return;
                     }
 
                     const data = JSON.parse(decodeURIComponent(subjectMetadata));
                     aplicarDadosFicha(data);
-                    alert("Ficha importada com sucesso a partir do arquivo PDF!");
+                    alert("Ficha importada com sucesso do arquivo PDF!");
 
                 } else if (file.name.endsWith('.json') || file.type === 'application/json') {
-                    // Importação padrão de arquivo JSON
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         try {
@@ -775,16 +903,10 @@
                     alert("Por favor, selecione um arquivo válido (.pdf ou .json).");
                 }
             } catch (err) {
-                alert("Erro ao processar o arquivo. Certifique-se de que é uma ficha válida.");
+                alert("Erro ao processar o arquivo.");
             } finally {
-                event.target.value = ''; // Limpa a seleção para permitir reimportar se necessário
+                event.target.value = '';
             }
-        }
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(() => {});
-            });
         }
     </script>
 </body>
