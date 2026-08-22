@@ -118,7 +118,7 @@
         <!-- Botões de Ação -->
         <div class="flex flex-wrap justify-end gap-2 mb-4 data-html2canvas-ignore">
             <button type="button" onclick="imprimirFichaFisica()" class="btn-stepper px-3 py-1.5 rounded text-xs font-bold flex items-center border-amber-700 hover:border-amber-500 bg-amber-950/40">
-                <i class="fa-solid fa-print mr-1.5 text-amber-400"></i> Imprimir Ficha Física
+                <i class="fa-solid fa-print mr-1.5 text-amber-400"></i> Imprimir Ficha Física (Estilo Místico)
             </button>
             <button type="button" onclick="baixarPDF()" class="btn-stepper px-3 py-1.5 rounded text-xs font-bold flex items-center border-red-700 hover:border-red-500 bg-red-950/40">
                 <i class="fa-solid fa-file-pdf mr-1.5 text-red-400"></i> Baixar PDF
@@ -144,8 +144,8 @@
         </header>
 
         <!-- Informações Básicas -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="md:col-span-2">
                 <label for="char-personagem" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Personagem</label>
                 <input type="text" id="char-personagem" class="input-dark w-full p-2 rounded text-sm" placeholder="Nome do Personagem">
             </div>
@@ -154,8 +154,16 @@
                 <input type="text" id="char-player" class="input-dark w-full p-2 rounded text-sm" placeholder="Seu Nome">
             </div>
             <div>
-                <label for="char-sequencia" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Sequência</label>
+                <label for="char-caminho" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Caminho / Trilha</label>
+                <input type="text" id="char-caminho" class="input-dark w-full p-2 rounded text-sm" placeholder="Ex: Caminho do Louco">
+            </div>
+            <div class="md:col-span-2">
+                <label for="char-sequencia" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Sequência Atual</label>
                 <input type="text" id="char-sequencia" class="input-dark w-full p-2 rounded text-sm" placeholder="Ex: Sequência 9 - Vidente">
+            </div>
+            <div class="md:col-span-2">
+                <label for="char-atuacao" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Digestão da Poção (Atuação %)</label>
+                <input type="text" id="char-atuacao" class="input-dark w-full p-2 rounded text-sm" placeholder="Ex: 45% Digestionada">
             </div>
         </div>
 
@@ -164,7 +172,7 @@
             <!-- Vida -->
             <div class="input-dark p-3 rounded border border-red-900">
                 <div class="flex justify-between items-center mb-1">
-                    <span class="text-xs uppercase font-bold text-red-400"><i class="fa-solid fa-heart mr-1"></i> Vida</span>
+                    <span class="text-xs uppercase font-bold text-red-400"><i class="fa-solid fa-heart mr-1"></i> Vida (PV)</span>
                     <button type="button" onclick="recalcularPV(true)" title="Recalcular vida base" class="text-[10px] text-gray-400 hover:text-white data-html2canvas-ignore"><i class="fa-solid fa-rotate-right"></i></button>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
@@ -200,7 +208,7 @@
             <!-- CA -->
             <div class="input-dark p-3 rounded border border-yellow-900">
                 <div class="flex justify-between items-center mb-1">
-                    <span class="text-xs uppercase font-bold text-yellow-400"><i class="fa-solid fa-shield mr-1"></i> CA</span>
+                    <span class="text-xs uppercase font-bold text-yellow-400"><i class="fa-solid fa-shield mr-1"></i> Defesa / CA</span>
                     <button type="button" onclick="recalcularCA(true)" title="Recalcular CA base" class="text-[10px] text-gray-400 hover:text-white data-html2canvas-ignore"><i class="fa-solid fa-rotate-right"></i></button>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
@@ -217,7 +225,7 @@
 
             <!-- REE -->
             <div class="input-dark p-3 rounded border border-blue-900">
-                <span class="block text-xs uppercase font-bold text-blue-400 mb-1"><i class="fa-solid fa-wand-sparkles mr-1"></i> REE</span>
+                <span class="block text-xs uppercase font-bold text-blue-400 mb-1"><i class="fa-solid fa-wand-sparkles mr-1"></i> Espiritualidade (REE)</span>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <span class="text-[10px] text-gray-400 block">Total</span>
@@ -377,12 +385,12 @@
         <!-- Aba 4: Pertences & Notas -->
         <div id="tab-anotacoes" class="tab-content hidden space-y-4">
             <div>
-                <label for="pertences-text" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Pertences / Inventário</label>
+                <label for="pertences-text" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Artefatos Selados & Inventário</label>
                 <textarea id="pertences-text" rows="5" class="input-dark w-full p-3 rounded text-sm" placeholder="Liste seus pertences, itens valiosos, armas e selos..."></textarea>
             </div>
             <div>
-                <label for="notas-text" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Notas & Histórico</label>
-                <textarea id="notas-text" rows="6" class="input-dark w-full p-3 rounded text-sm" placeholder="Anotações gerais, contatos, pistas de investigações..."></textarea>
+                <label for="notas-text" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Notas, Rituais & Histórico</label>
+                <textarea id="notas-text" rows="6" class="input-dark w-full p-3 rounded text-sm" placeholder="Anotações gerais, rituais conhecidos, contatos..."></textarea>
             </div>
         </div>
 
@@ -393,31 +401,31 @@
 
     <script>
         const SKILLS = [
-            { id: 'atletismo', name: 'Atletismo', attr: 'FOR' },
-            { id: 'luta', name: 'Luta', attr: 'FOR' },
             { id: 'acrobacia', name: 'Acrobacia', attr: 'AGI' },
-            { id: 'furtividade', name: 'Furtividade', attr: 'AGI' },
-            { id: 'iniciativa', name: 'Iniciativa', attr: 'AGI' },
-            { id: 'pontaria', name: 'Pontaria', attr: 'AGI' },
-            { id: 'reflexos', name: 'Reflexos', attr: 'AGI' },
-            { id: 'conjuntura', name: 'Conjuntura', attr: 'INT' },
-            { id: 'ciencias', name: 'Ciências', attr: 'INT' },
-            { id: 'investigacao', name: 'Investigação', attr: 'INT' },
-            { id: 'medicina', name: 'Medicina', attr: 'INT' },
-            { id: 'ocultismo', name: 'Ocultismo', attr: 'INT' },
-            { id: 'religiao', name: 'Religião', attr: 'INT' },
-            { id: 'historia', name: 'História', attr: 'INT' },
-            { id: 'rituais', name: 'Rituais', attr: 'INT' },
+            { id: 'atletismo', name: 'Atletismo', attr: 'FOR' },
             { id: 'artes', name: 'Artes', attr: 'PRE' },
+            { id: 'ciencias', name: 'Ciências', attr: 'INT' },
+            { id: 'conjuntura', name: 'Conjuntura', attr: 'INT' },
             { id: 'diplomacia', name: 'Diplomacia', attr: 'PRE' },
+            { id: 'divinacao', name: 'Divinação', attr: 'PRE' },
             { id: 'enganacao', name: 'Enganação', attr: 'PRE' },
+            { id: 'fortitude', name: 'Fortitude', attr: 'VIG' },
+            { id: 'furtividade', name: 'Furtividade', attr: 'AGI' },
+            { id: 'historia', name: 'História', attr: 'INT' },
+            { id: 'iniciativa', name: 'Iniciativa', attr: 'AGI' },
             { id: 'intimidacao', name: 'Intimidação', attr: 'PRE' },
             { id: 'intuicao', name: 'Intuição', attr: 'PRE' },
+            { id: 'investigacao', name: 'Investigação', attr: 'INT' },
+            { id: 'luta', name: 'Luta', attr: 'FOR' },
+            { id: 'medicina', name: 'Medicina', attr: 'INT' },
+            { id: 'ocultismo', name: 'Ocultismo', attr: 'INT' },
             { id: 'percepcao', name: 'Percepção', attr: 'PRE' },
-            { id: 'vontade', name: 'Vontade', attr: 'PRE' },
-            { id: 'divinacao', name: 'Divinação', attr: 'PRE' },
-            { id: 'fortitude', name: 'Fortitude', attr: 'VIG' },
-            { id: 'sobrevivencia', name: 'Sobrevivência', attr: 'VIG' }
+            { id: 'pontaria', name: 'Pontaria', attr: 'AGI' },
+            { id: 'reflexos', name: 'Reflexos', attr: 'AGI' },
+            { id: 'religiao', name: 'Religião', attr: 'INT' },
+            { id: 'rituais', name: 'Rituais', attr: 'INT' },
+            { id: 'sobrevivencia', name: 'Sobrevivência', attr: 'VIG' },
+            { id: 'vontade', name: 'Vontade', attr: 'PRE' }
         ];
 
         let manualFlags = { pv: false, san: false, ca: false };
@@ -694,7 +702,7 @@
             });
         }
 
-        // --- GERAÇÃO DE FICHA FÍSICA / IMPRESSÃO EM BRANCO (OTIMIZADA) ---
+        // --- IMPRESSÃO ESTILO ORDEM PARANORMAL (NOVA IMPRESSÃO MÍSTICA REENCHIDA) ---
         function imprimirFichaFisica() {
             const printWindow = window.open('', '_blank');
             if (!printWindow) {
@@ -702,233 +710,450 @@
                 return;
             }
 
-            let skillsHtml = '';
+            let skillsTableHtml = '';
             SKILLS.forEach(skill => {
-                skillsHtml += `
-                    <div class="skill-row">
-                        <div class="skill-label">
-                            <span class="checkbox-sq"></span>
-                            <span><strong>${skill.name}</strong> <span class="attr-tag">(${skill.attr})</span></span>
-                        </div>
-                        <div class="skill-val">[ &nbsp;&nbsp;&nbsp;&nbsp; ]</div>
-                    </div>
+                skillsTableHtml += `
+                    <tr>
+                        <td class="skill-name"><strong>${skill.name.toUpperCase()}</strong></td>
+                        <td class="center-col font-mono">${skill.attr}</td>
+                        <td class="center-col">[ &nbsp;&nbsp; ]</td>
+                        <td class="center-col"><span class="sq-check"></span></td>
+                        <td class="center-col">[ &nbsp;&nbsp; ]</td>
+                    </tr>
                 `;
             });
-
-            let habsHtml = '';
-            for (let i = 1; i <= 5; i++) {
-                habsHtml += `
-                    <div class="hab-card">
-                        <div class="hab-head">
-                            <span>Habilidade ${i}: ________________________</span>
-                            <span>Custo/Tipo: ____________</span>
-                        </div>
-                        <div class="hab-body">Efeito / Descrição:</div>
-                    </div>
-                `;
-            }
 
             const physicalTemplate = `
                 <!DOCTYPE html>
                 <html lang="pt-BR">
                 <head>
                     <meta charset="UTF-8">
-                    <title>Ficha de Personagem - Lord of the Mysteries (Impressão)</title>
+                    <title>Ficha Beyonder - Lord of the Mysteries</title>
                     <style>
-                        @page { size: A4 portrait; margin: 6mm 8mm; }
+                        @page { size: A4 portrait; margin: 4mm 6mm; }
                         * { box-sizing: border-box; }
                         body { 
-                            font-family: 'Times New Roman', Times, serif; 
+                            font-family: 'Times New Roman', serif; 
                             color: #000; 
                             background: #fff; 
                             margin: 0; 
                             padding: 0; 
-                            font-size: 10px; 
+                            font-size: 9.5px; 
                             line-height: 1.15; 
                         }
-                        .header { 
-                            text-align: center; 
-                            border-bottom: 2px solid #000; 
-                            padding-bottom: 2px; 
-                            margin-bottom: 6px; 
+
+                        /* Moldura Externa Estilo Ordem Paranormal */
+                        .sheet-border {
+                            border: 2px solid #000;
+                            padding: 5px 8px;
+                            height: 98vh;
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
                         }
-                        .header h1 { 
-                            margin: 0; 
-                            font-size: 18px; 
-                            text-transform: uppercase; 
+
+                        /* Flap Lateral */
+                        .side-tab {
+                            position: absolute;
+                            left: -22px;
+                            top: 40%;
+                            transform: rotate(-90deg);
+                            font-size: 9px;
+                            font-weight: bold;
+                            letter-spacing: 2px;
+                            background: #000;
+                            color: #fff;
+                            padding: 2px 10px;
+                            text-transform: uppercase;
+                        }
+
+                        /* Banner do Título */
+                        .header-banner {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            border-bottom: 2px solid #000;
+                            padding-bottom: 4px;
+                            margin-bottom: 6px;
+                        }
+                        .header-banner h1 {
+                            margin: 0;
+                            font-size: 20px;
+                            font-family: 'Georgia', serif;
                             letter-spacing: 1px;
+                            text-transform: uppercase;
+                            font-weight: 900;
                         }
-                        .header p { 
-                            margin: 1px 0 0 0; 
-                            font-size: 9px; 
-                            font-style: italic; 
-                        }
-                        .box-field { 
-                            border: 1px solid #000; 
-                            padding: 3px 5px; 
-                            border-radius: 2px; 
-                        }
-                        .box-title { 
-                            font-size: 7.5px; 
-                            text-transform: uppercase; 
-                            font-weight: bold; 
-                            display: block; 
-                            color: #111; 
-                            margin-bottom: 2px; 
-                        }
-                        .grid-top { 
-                            display: grid; 
-                            grid-template-columns: 2fr 1.5fr 1.5fr; 
-                            gap: 5px; 
-                            margin-bottom: 5px; 
-                        }
-                        .status-grid, .attr-grid { 
-                            display: grid; 
-                            grid-template-columns: repeat(5, 1fr); 
-                            gap: 5px; 
-                            margin-bottom: 6px; 
-                            text-align: center; 
-                        }
-                        .main-layout { 
-                            display: grid; 
-                            grid-template-columns: 1fr 1fr; 
-                            gap: 10px; 
-                        }
-                        .section-title { 
-                            font-size: 10.5px; 
-                            font-weight: bold; 
-                            text-transform: uppercase; 
-                            border-bottom: 1.5px solid #000; 
-                            margin-bottom: 4px; 
-                            padding-bottom: 1px; 
-                        }
-                        
-                        /* Skills Styling */
-                        .skills-column {
+                        .header-fields {
                             display: grid;
-                            grid-template-columns: 1fr 1fr;
-                            gap: 0 8px;
-                        }
-                        .skill-row { 
-                            display: flex; 
-                            justify-content: space-between; 
-                            align-items: center; 
-                            border-bottom: 1px dotted #888; 
-                            padding: 2px 0; 
-                            font-size: 9px; 
-                            white-space: nowrap; 
-                        }
-                        .skill-label { 
-                            display: flex; 
-                            align-items: center; 
-                            gap: 3px; 
-                        }
-                        .checkbox-sq { 
-                            width: 8px; 
-                            height: 8px; 
-                            border: 1px solid #000; 
-                            display: inline-block; 
-                        }
-                        .attr-tag { 
-                            color: #444; 
-                            font-size: 8px; 
-                        }
-                        .skill-val { 
-                            font-weight: bold; 
-                            font-family: monospace; 
-                            font-size: 8.5px; 
+                            grid-template-columns: 2fr 1fr 1.5fr;
+                            gap: 4px;
+                            margin-bottom: 6px;
                         }
 
-                        /* Cards de Habilidade */
-                        .hab-card { 
-                            border: 1px solid #000; 
-                            border-radius: 2px; 
-                            padding: 4px 6px; 
-                            margin-bottom: 5px; 
-                            font-size: 9px; 
+                        .field-box {
+                            border: 1px solid #000;
+                            padding: 2px 4px;
+                            position: relative;
                         }
-                        .hab-head { 
-                            display: flex; 
-                            justify-content: space-between; 
-                            border-bottom: 1px solid #aaa; 
-                            padding-bottom: 2px; 
-                            margin-bottom: 3px; 
-                            font-weight: bold; 
+                        .field-label {
+                            font-size: 7px;
+                            font-weight: bold;
+                            text-transform: uppercase;
+                            background: #000;
+                            color: #fff;
+                            padding: 0px 3px;
+                            display: inline-block;
                         }
-                        .hab-body { 
-                            height: 28px; 
-                            color: #777; 
-                            font-style: italic; 
-                            font-size: 8.5px; 
+                        .field-val {
+                            font-size: 9px;
+                            margin-top: 1px;
+                            min-height: 12px;
                         }
 
-                        /* Lined Text Areas */
+                        /* Layout Principal de 2 Colunas */
+                        .main-grid {
+                            display: grid;
+                            grid-template-columns: 1.15fr 0.85fr;
+                            gap: 8px;
+                            flex-grow: 1;
+                        }
+
+                        /* Diagrama Celestial de Atributos */
+                        .attributes-orbit-container {
+                            border: 1.5px solid #000;
+                            padding: 6px;
+                            position: relative;
+                            text-align: center;
+                            margin-bottom: 6px;
+                            background: #fafafa;
+                        }
+                        .orbit-title {
+                            font-size: 8px;
+                            font-weight: bold;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            margin-bottom: 4px;
+                        }
+                        .orbit-diagram {
+                            display: flex;
+                            justify-content: space-around;
+                            align-items: center;
+                            position: relative;
+                            margin: 4px 0;
+                        }
+                        .attr-node {
+                            border: 1.5px solid #000;
+                            border-radius: 50%;
+                            width: 42px;
+                            height: 42px;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            background: #fff;
+                            box-shadow: 0 0 0 2px #fff inset;
+                        }
+                        .attr-node strong {
+                            font-size: 8px;
+                            text-transform: uppercase;
+                        }
+                        .attr-node span {
+                            font-size: 7.5px;
+                            color: #444;
+                        }
+
+                        /* Estatísticas Beyonder (PV, SAN, REE, CA, Corrupção) */
+                        .stats-row {
+                            display: grid;
+                            grid-template-columns: repeat(5, 1fr);
+                            gap: 4px;
+                            margin-bottom: 6px;
+                        }
+                        .stat-card {
+                            border: 1.5px solid #000;
+                            text-align: center;
+                            padding: 2px;
+                        }
+                        .stat-header {
+                            background: #000;
+                            color: #fff;
+                            font-size: 7px;
+                            font-weight: bold;
+                            text-transform: uppercase;
+                            padding: 1px 0;
+                        }
+                        .stat-body {
+                            font-size: 9px;
+                            font-weight: bold;
+                            padding: 3px 0;
+                        }
+
+                        /* Títulos de Seção Estilo Ordem Paranormal */
+                        .section-banner {
+                            background: #000;
+                            color: #fff;
+                            font-size: 8.5px;
+                            font-weight: bold;
+                            text-transform: uppercase;
+                            padding: 2px 5px;
+                            letter-spacing: 1px;
+                            margin-bottom: 4px;
+                            display: flex;
+                            justify-content: space-between;
+                        }
+
+                        /* Tabela de Perícias Compacta */
+                        .skills-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-size: 8px;
+                        }
+                        .skills-table th {
+                            background: #e0e0e0;
+                            border: 1px solid #000;
+                            padding: 1.5px;
+                            font-size: 7px;
+                            text-transform: uppercase;
+                        }
+                        .skills-table td {
+                            border-bottom: 1px dotted #666;
+                            padding: 1.5px 2px;
+                        }
+                        .skill-name {
+                            font-size: 8.5px;
+                        }
+                        .center-col { text-align: center; }
+                        .sq-check {
+                            width: 7px;
+                            height: 7px;
+                            border: 1px solid #000;
+                            display: inline-block;
+                        }
+
+                        /* Blocos de Texto Pautados */
                         .lined-box {
                             border: 1px solid #000;
-                            border-radius: 2px;
-                            padding: 4px 6px;
-                            background-image: repeating-linear-gradient(transparent, transparent 15px, #bbb 16px);
-                            line-height: 16px;
-                            font-size: 9px;
+                            background-image: repeating-linear-gradient(transparent, transparent 13px, #aaa 14px);
+                            line-height: 14px;
+                            font-size: 8.5px;
+                            padding: 2px 4px;
+                        }
+
+                        /* Cards de Habilidades Beyonder Compactos */
+                        .hab-item {
+                            border: 1px solid #000;
+                            padding: 3px 4px;
+                            margin-bottom: 4px;
+                        }
+                        .hab-head-row {
+                            display: flex;
+                            justify-content: space-between;
+                            border-bottom: 1px solid #888;
+                            padding-bottom: 1px;
+                            margin-bottom: 2px;
+                            font-weight: bold;
+                            font-size: 8.5px;
+                        }
+                        .hab-body-space {
+                            height: 20px;
+                            font-style: italic;
+                            color: #555;
+                            font-size: 8px;
+                        }
+
+                        .footer-note {
+                            font-size: 7px;
+                            text-align: center;
+                            border-top: 1px solid #000;
+                            padding-top: 2px;
+                            margin-top: 2px;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
                         }
                     </style>
                 </head>
                 <body>
-                    <div class="header">
-                        <h1>Lord of the Mysteries RPG</h1>
-                        <p>Ficha de Personagem (Modelo Físico)</p>
-                    </div>
+                    <div class="sheet-border">
+                        <div class="side-tab">FICHA BEYONDER • LORD OF THE MYSTERIES</div>
 
-                    <div class="grid-top">
-                        <div class="box-field"><span class="box-title">Personagem</span></div>
-                        <div class="box-field"><span class="box-title">Player</span></div>
-                        <div class="box-field"><span class="box-title">Sequência</span></div>
-                    </div>
-
-                    <div class="status-grid">
-                        <div class="box-field"><span class="box-title">VIDA (Total / Atual)</span> [ ____ / ____ ]</div>
-                        <div class="box-field"><span class="box-title">SANIDADE (Total / Atual)</span> [ ____ / ____ ]</div>
-                        <div class="box-field"><span class="box-title">CA (Armadura)</span> [ ____ ]</div>
-                        <div class="box-field"><span class="box-title">REE (Total / Atual)</span> [ ____ / ____ ]</div>
-                        <div class="box-field"><span class="box-title">CORRUPÇÃO (%)</span> [ ____ % ]</div>
-                    </div>
-
-                    <div class="attr-grid">
-                        <div class="box-field"><span class="box-title">FORÇA (FOR)</span> Val: ___ | Mod: ___</div>
-                        <div class="box-field"><span class="box-title">AGILIDADE (AGI)</span> Val: ___ | Mod: ___</div>
-                        <div class="box-field"><span class="box-title">INTELIGÊNCIA (INT)</span> Val: ___ | Mod: ___</div>
-                        <div class="box-field"><span class="box-title">PRESENÇA (PRE)</span> Val: ___ | Mod: ___</div>
-                        <div class="box-field"><span class="box-title">VIGOR (VIG)</span> Val: ___ | Mod: ___</div>
-                    </div>
-
-                    <div class="main-layout">
-                        <!-- Coluna da Esquerda -->
                         <div>
-                            <div class="section-title">Perícias</div>
-                            <div class="skills-column">
-                                ${skillsHtml}
+                            <!-- Header -->
+                            <div class="header-banner">
+                                <div>
+                                    <h1>LORD OF THE MYSTERIES</h1>
+                                    <div style="font-size: 8px; font-style: italic;">SISTEMA RPG • REGISTRO DE SEQUÊNCIA E ATUAÇÃO</div>
+                                </div>
+                                <div style="text-align: right; font-size: 8px;">
+                                    <strong>CLUBE DAS TAROT / IGREJA:</strong> ___________________
+                                </div>
                             </div>
 
-                            <div style="margin-top: 10px;">
-                                <div class="section-title">Aparência & Descrição Visual</div>
-                                <div class="lined-box" style="height: 145px;"></div>
+                            <!-- Dados do Personagem -->
+                            <div class="header-fields">
+                                <div class="field-box">
+                                    <span class="field-label">NOME DO PERSONAGEM</span>
+                                    <div class="field-val"></div>
+                                </div>
+                                <div class="field-box">
+                                    <span class="field-label">JOGADOR</span>
+                                    <div class="field-val"></div>
+                                </div>
+                                <div class="field-box">
+                                    <span class="field-label">CAMINHO DA POÇÃO</span>
+                                    <div class="field-val"></div>
+                                </div>
+                                <div class="field-box">
+                                    <span class="field-label">SEQUÊNCIA ATUAL</span>
+                                    <div class="field-val"></div>
+                                </div>
+                                <div class="field-box">
+                                    <span class="field-label">ATUAÇÃO / DIGESTÃO</span>
+                                    <div class="field-val">___ %</div>
+                                </div>
+                                <div class="field-box">
+                                    <span class="field-label">ÂNCORA / IDENTIDADE</span>
+                                    <div class="field-val"></div>
+                                </div>
+                            </div>
+
+                            <!-- Atributos Diagrama Celestial -->
+                            <div class="attributes-orbit-container">
+                                <div class="orbit-title">✶ DIAGRAMA CELESTIAL DE ATRIBUTOS ✶</div>
+                                <div class="orbit-diagram">
+                                    <div class="attr-node">
+                                        <strong>FOR</strong>
+                                        <span>FORÇA</span>
+                                    </div>
+                                    <div class="attr-node">
+                                        <strong>AGI</strong>
+                                        <span>AGILIDADE</span>
+                                    </div>
+                                    <div class="attr-node">
+                                        <strong>INT</strong>
+                                        <span>INTELECTO</span>
+                                    </div>
+                                    <div class="attr-node">
+                                        <strong>PRE</strong>
+                                        <span>PRESENÇA</span>
+                                    </div>
+                                    <div class="attr-node">
+                                        <strong>VIG</strong>
+                                        <span>VIGOR</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Barras de Status -->
+                            <div class="stats-row">
+                                <div class="stat-card">
+                                    <div class="stat-header">PONTOS DE VIDA</div>
+                                    <div class="stat-body">[ &nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp; ]</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">ESPIRITUALIDADE</div>
+                                    <div class="stat-body">[ &nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp; ]</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">SANIDADE (SAN)</div>
+                                    <div class="stat-body">[ &nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp; ]</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">DEFESA (CA)</div>
+                                    <div class="stat-body">[ &nbsp;&nbsp;&nbsp;&nbsp; ]</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">CORRUPÇÃO</div>
+                                    <div class="stat-body">[ &nbsp;&nbsp;&nbsp;&nbsp; % ]</div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Coluna da Direita -->
-                        <div>
-                            <div class="section-title">Habilidades Beyonder</div>
-                            ${habsHtml}
+                        <!-- Grid Principal de Conteúdo Preenchido -->
+                        <div class="main-grid">
+                            
+                            <!-- Esquerda: Habilidades Beyonder & Misticismo -->
+                            <div>
+                                <div class="section-banner">
+                                    <span>HABILIDADES BEYONDER & MAGIAS</span>
+                                    <span>PONTOS DE REE / TIPO</span>
+                                </div>
 
-                            <div style="margin-top: 4px;">
-                                <div class="section-title">Traumas & Mutações</div>
-                                <div class="lined-box" style="height: 50px;"></div>
+                                <div class="hab-item">
+                                    <div class="hab-head-row">
+                                        <span>1. _________________________________</span>
+                                        <span>Custo: _____</span>
+                                    </div>
+                                    <div class="hab-body-space">Efeito / Alcance:</div>
+                                </div>
+
+                                <div class="hab-item">
+                                    <div class="hab-head-row">
+                                        <span>2. _________________________________</span>
+                                        <span>Custo: _____</span>
+                                    </div>
+                                    <div class="hab-body-space">Efeito / Alcance:</div>
+                                </div>
+
+                                <div class="hab-item">
+                                    <div class="hab-head-row">
+                                        <span>3. _________________________________</span>
+                                        <span>Custo: _____</span>
+                                    </div>
+                                    <div class="hab-body-space">Efeito / Alcance:</div>
+                                </div>
+
+                                <div class="hab-item">
+                                    <div class="hab-head-row">
+                                        <span>4. _________________________________</span>
+                                        <span>Custo: _____</span>
+                                    </div>
+                                    <div class="hab-body-space">Efeito / Alcance:</div>
+                                </div>
+
+                                <div class="section-banner" style="margin-top: 4px;">
+                                    <span>ARTEFATOS SELADOS & PERTENCES</span>
+                                </div>
+                                <div class="lined-box" style="height: 68px;"></div>
+
+                                <div class="section-banner" style="margin-top: 4px;">
+                                    <span>LOUCURA, MUTAÇÕES & TRAUMAS PSICOLÓGICOS</span>
+                                </div>
+                                <div class="lined-box" style="height: 52px;"></div>
                             </div>
 
-                            <div style="margin-top: 6px;">
-                                <div class="section-title">Pertences / Inventário</div>
-                                <div class="lined-box" style="height: 110px;"></div>
+                            <!-- Direita: Tabela de Perícias e Descrição -->
+                            <div>
+                                <div class="section-banner">
+                                    <span>PERÍCIAS DE AGENTE</span>
+                                </div>
+                                <table class="skills-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: left;">PERÍCIA</th>
+                                            <th style="width: 25px;">ATR</th>
+                                            <th style="width: 35px;">BÔNUS</th>
+                                            <th style="width: 20px;">TR</th>
+                                            <th style="width: 35px;">OUTROS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${skillsTableHtml}
+                                    </tbody>
+                                </table>
+
+                                <div class="section-banner" style="margin-top: 6px;">
+                                    <span>APARÊNCIA & NOTAS DE INVESTIGAÇÃO</span>
+                                </div>
+                                <div class="lined-box" style="height: 80px;"></div>
                             </div>
+
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="footer-note">
+                            "A ATUAÇÃO É A CHAVE PARA A PRESERVAÇÃO DA SANIDADE" • FICHA IMPRESSA DE LORD OF THE MYSTERIES RPG
                         </div>
                     </div>
 
