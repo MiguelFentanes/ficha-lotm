@@ -152,55 +152,69 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <!-- Vida -->
             <div class="input-dark p-3 rounded border border-red-900">
-                <span class="block text-xs uppercase font-bold text-red-400 mb-1"><i class="fa-solid fa-heart mr-1"></i> Vida</span>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs uppercase font-bold text-red-400"><i class="fa-solid fa-heart mr-1"></i> Vida</span>
+                    <button type="button" onclick="recalcularPV(true)" title="Recalcular vida base" class="text-[10px] text-gray-400 hover:text-white"><i class="fa-solid fa-rotate-right"></i></button>
+                </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <span class="text-[10px] text-gray-400 block">Total</span>
-                        <input type="number" id="vida-total" class="input-dark w-full text-center py-1 rounded font-bold text-sm" placeholder="0">
+                        <input type="number" id="vida-total" class="input-dark w-full text-center py-1 rounded font-bold text-sm text-red-300" placeholder="12" oninput="marcarManual('pv')">
                     </div>
                     <div>
                         <span class="text-[10px] text-gray-400 block">Atual</span>
-                        <input type="number" id="vida-atual" class="input-dark w-full text-center py-1 rounded font-bold text-sm" placeholder="0">
+                        <input type="number" id="vida-atual" class="input-dark w-full text-center py-1 rounded font-bold text-sm" placeholder="12">
                     </div>
                 </div>
             </div>
 
             <!-- Sanidade -->
             <div class="input-dark p-3 rounded border border-purple-900">
-                <span class="block text-xs uppercase font-bold text-purple-400 mb-1"><i class="fa-solid fa-brain mr-1"></i> Sanidade</span>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs uppercase font-bold text-purple-400"><i class="fa-solid fa-brain mr-1"></i> Sanidade</span>
+                    <button type="button" onclick="recalcularSAN(true)" title="Recalcular sanidade base" class="text-[10px] text-gray-400 hover:text-white"><i class="fa-solid fa-rotate-right"></i></button>
+                </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <span class="text-[10px] text-gray-400 block">Total</span>
-                        <input type="number" id="sanidade-total" class="input-dark w-full text-center py-1 rounded font-bold text-sm" placeholder="0">
+                        <input type="number" id="sanidade-total" class="input-dark w-full text-center py-1 rounded font-bold text-sm text-purple-300" placeholder="10" oninput="marcarManual('san')">
                     </div>
                     <div>
                         <span class="text-[10px] text-gray-400 block">Atual</span>
-                        <input type="number" id="sanidade-atual" class="input-dark w-full text-center py-1 rounded font-bold text-sm" placeholder="0">
+                        <input type="number" id="sanidade-atual" class="input-dark w-full text-center py-1 rounded font-bold text-sm" placeholder="10">
                     </div>
                 </div>
             </div>
 
-            <!-- CA (Classe de Armadura) -->
-            <div class="input-dark p-3 rounded border border-yellow-900 flex flex-col justify-between">
-                <span class="block text-xs uppercase font-bold text-yellow-400"><i class="fa-solid fa-shield mr-1"></i> CA</span>
-                <input type="number" id="ca-val" class="input-dark w-full text-center py-1 rounded font-bold text-sm mt-1" placeholder="0">
+            <!-- CA (Classe de Armadura / Defesa Passiva) -->
+            <div class="input-dark p-3 rounded border border-yellow-900">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs uppercase font-bold text-yellow-400"><i class="fa-solid fa-shield mr-1"></i> CA</span>
+                    <button type="button" onclick="recalcularCA(true)" title="Recalcular CA base" class="text-[10px] text-gray-400 hover:text-white"><i class="fa-solid fa-rotate-right"></i></button>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <span class="text-[10px] text-gray-400 block" title="Bônus de Equipamento/Outros">Equip</span>
+                        <input type="number" id="ca-equip" class="input-dark w-full text-center py-1 rounded font-bold text-sm" placeholder="0" oninput="calcularTudo()">
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-gray-400 block">Total</span>
+                        <input type="number" id="ca-val" class="input-dark w-full text-center py-1 rounded font-bold text-sm text-yellow-300" placeholder="10" oninput="marcarManual('ca')">
+                    </div>
+                </div>
             </div>
 
             <!-- REE (Espiritualidade) -->
             <div class="input-dark p-3 rounded border border-blue-900">
                 <span class="block text-xs uppercase font-bold text-blue-400 mb-1"><i class="fa-solid fa-wand-sparkles mr-1"></i> REE</span>
-                <div class="grid grid-cols-3 gap-1">
+                <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <span class="text-[9px] text-gray-400 block">Total</span>
-                        <input type="text" id="ree-total" class="input-dark w-full text-center py-1 rounded font-bold text-xs" value="100%">
+                        <span class="text-[10px] text-gray-400 block">Total</span>
+                        <input type="text" id="ree-total" class="input-dark w-full text-center py-1 rounded font-bold text-sm" value="100%">
                     </div>
                     <div>
-                        <span class="text-[9px] text-gray-400 block">Atual</span>
-                        <input type="text" id="ree-atual" class="input-dark w-full text-center py-1 rounded font-bold text-xs" placeholder="0%">
-                    </div>
-                    <div>
-                        <span class="text-[9px] text-gray-400 block">Bônus</span>
-                        <input type="text" id="ree-bonus" class="input-dark w-full text-center py-1 rounded font-bold text-xs" placeholder="+0">
+                        <span class="text-[10px] text-gray-400 block">Atual</span>
+                        <input type="text" id="ree-atual" class="input-dark w-full text-center py-1 rounded font-bold text-sm" placeholder="100%">
                     </div>
                 </div>
             </div>
@@ -227,164 +241,67 @@
                 <!-- Força -->
                 <div class="input-dark p-2 rounded border attr-FOR text-center">
                     <span class="attr-badge px-2 py-0.5 rounded text-[10px] font-bold border block mb-1">FOR</span>
-                    <div class="flex justify-center items-center space-x-1">
+                    <div class="flex justify-center items-center space-x-1 mb-1">
                         <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-for-val', -1)">-</button>
-                        <input type="number" id="attr-for-val" value="0" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs">
+                        <input type="number" id="attr-for-val" value="10" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs" oninput="calcularTudo()">
                         <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-for-val', 1)">+</button>
                     </div>
+                    <span id="mod-for" class="text-[11px] font-bold text-amber-300 block">Mod: +0</span>
                 </div>
 
                 <!-- Agilidade -->
                 <div class="input-dark p-2 rounded border attr-AGI text-center">
                     <span class="attr-badge px-2 py-0.5 rounded text-[10px] font-bold border block mb-1">AGI</span>
-                    <div class="flex justify-center items-center space-x-1">
+                    <div class="flex justify-center items-center space-x-1 mb-1">
                         <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-agi-val', -1)">-</button>
-                        <input type="number" id="attr-agi-val" value="0" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs">
+                        <input type="number" id="attr-agi-val" value="10" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs" oninput="calcularTudo()">
                         <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-agi-val', 1)">+</button>
                     </div>
+                    <span id="mod-agi" class="text-[11px] font-bold text-amber-300 block">Mod: +0</span>
                 </div>
 
                 <!-- Inteligência -->
                 <div class="input-dark p-2 rounded border attr-INT text-center">
                     <span class="attr-badge px-2 py-0.5 rounded text-[10px] font-bold border block mb-1">INT</span>
-                    <div class="flex justify-center items-center space-x-1">
+                    <div class="flex justify-center items-center space-x-1 mb-1">
                         <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-int-val', -1)">-</button>
-                        <input type="number" id="attr-int-val" value="0" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs">
+                        <input type="number" id="attr-int-val" value="10" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs" oninput="calcularTudo()">
                         <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-int-val', 1)">+</button>
                     </div>
+                    <span id="mod-int" class="text-[11px] font-bold text-amber-300 block">Mod: +0</span>
                 </div>
 
                 <!-- Presença -->
                 <div class="input-dark p-2 rounded border attr-PRE text-center">
                     <span class="attr-badge px-2 py-0.5 rounded text-[10px] font-bold border block mb-1">PRE</span>
-                    <div class="flex justify-center items-center space-x-1">
+                    <div class="flex justify-center items-center space-x-1 mb-1">
                         <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-pre-val', -1)">-</button>
-                        <input type="number" id="attr-pre-val" value="0" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs">
+                        <input type="number" id="attr-pre-val" value="10" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs" oninput="calcularTudo()">
                         <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-pre-val', 1)">+</button>
                     </div>
+                    <span id="mod-pre" class="text-[11px] font-bold text-amber-300 block">Mod: +0</span>
                 </div>
 
                 <!-- Vigor -->
                 <div class="input-dark p-2 rounded border attr-VIG text-center col-span-2 md:col-span-1">
                     <span class="attr-badge px-2 py-0.5 rounded text-[10px] font-bold border block mb-1">VIG</span>
-                    <div class="flex justify-center items-center space-x-1">
+                    <div class="flex justify-center items-center space-x-1 mb-1">
                         <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-vig-val', -1)">-</button>
-                        <input type="number" id="attr-vig-val" value="0" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs">
+                        <input type="number" id="attr-vig-val" value="10" class="input-dark w-10 text-center py-0.5 rounded font-bold text-xs" oninput="calcularTudo()">
                         <button type="button" class="btn-stepper w-6 h-6 rounded text-xs font-bold" onclick="changeValue('attr-vig-val', 1)">+</button>
                     </div>
+                    <span id="mod-vig" class="text-[11px] font-bold text-amber-300 block">Mod: +0</span>
                 </div>
             </div>
 
             <!-- Perícias -->
-            <h2 class="cinzel text-sm font-bold text-[#d4af37] uppercase mb-3"><i class="fa-solid fa-list-check mr-1"></i> Perícias</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                <!-- Coluna Esquerda -->
-                <div class="space-y-2">
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Atletismo <span class="text-gray-400 text-[10px]">(FOR)</span></span>
-                        <input type="number" id="per-atletismo" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Luta <span class="text-gray-400 text-[10px]">(FOR)</span></span>
-                        <input type="number" id="per-luta" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Acrobacia <span class="text-gray-400 text-[10px]">(AGI)</span></span>
-                        <input type="number" id="per-acrobacia" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Furtividade <span class="text-gray-400 text-[10px]">(AGI)</span></span>
-                        <input type="number" id="per-furtividade" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Iniciativa <span class="text-gray-400 text-[10px]">(AGI)</span></span>
-                        <input type="number" id="per-iniciativa" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Pontaria <span class="text-gray-400 text-[10px]">(AGI)</span></span>
-                        <input type="number" id="per-pontaria" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Reflexos <span class="text-gray-400 text-[10px]">(AGI)</span></span>
-                        <input type="number" id="per-reflexos" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Conjuntura <span class="text-gray-400 text-[10px]">(INT)</span></span>
-                        <input type="number" id="per-conjuntura" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Ciências <span class="text-gray-400 text-[10px]">(INT)</span></span>
-                        <input type="number" id="per-ciencias" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Investigação <span class="text-gray-400 text-[10px]">(INT)</span></span>
-                        <input type="number" id="per-investigacao" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Medicina <span class="text-gray-400 text-[10px]">(INT)</span></span>
-                        <input type="number" id="per-medicina" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Ocultismo <span class="text-gray-400 text-[10px]">(INT)</span></span>
-                        <input type="number" id="per-ocultismo" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Religião <span class="text-gray-400 text-[10px]">(INT)</span></span>
-                        <input type="number" id="per-religiao" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                </div>
-
-                <!-- Coluna Direita -->
-                <div class="space-y-2">
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>História <span class="text-gray-400 text-[10px]">(INT)</span></span>
-                        <input type="number" id="per-historia" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Rituais <span class="text-gray-400 text-[10px]">(INT)</span></span>
-                        <input type="number" id="per-rituais" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Artes <span class="text-gray-400 text-[10px]">(PRE)</span></span>
-                        <input type="number" id="per-artes" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Diplomacia <span class="text-gray-400 text-[10px]">(PRE)</span></span>
-                        <input type="number" id="per-diplomacia" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Enganação <span class="text-gray-400 text-[10px]">(PRE)</span></span>
-                        <input type="number" id="per-enganacao" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Intimidação <span class="text-gray-400 text-[10px]">(PRE)</span></span>
-                        <input type="number" id="per-intimidacao" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Intuição <span class="text-gray-400 text-[10px]">(PRE)</span></span>
-                        <input type="number" id="per-intuicao" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Percepção <span class="text-gray-400 text-[10px]">(PRE)</span></span>
-                        <input type="number" id="per-percepcao" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Vontade <span class="text-gray-400 text-[10px]">(PRE)</span></span>
-                        <input type="number" id="per-vontade" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Divinação <span class="text-gray-400 text-[10px]">(PRE)</span></span>
-                        <input type="number" id="per-divinacao" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Fortitude <span class="text-gray-400 text-[10px]">(VIG)</span></span>
-                        <input type="number" id="per-fortitude" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                    <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Sobrevivência <span class="text-gray-400 text-[10px]">(VIG)</span></span>
-                        <input type="number" id="per-sobrevivencia" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
-                    </div>
-                </div>
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="cinzel text-sm font-bold text-[#d4af37] uppercase"><i class="fa-solid fa-list-check mr-1"></i> Perícias</h2>
+                <span class="text-[10px] text-gray-400 italic">Treinada = +2 nos testes</span>
+            </div>
+            
+            <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                <!-- Gerado Dinamicamente via JavaScript -->
             </div>
         </div>
 
@@ -424,6 +341,37 @@
 
     <!-- Scripts de Funcionalidade -->
     <script>
+        // Lista Completa de Perícias e seus Atributos Base
+        const SKILLS = [
+            { id: 'atletismo', name: 'Atletismo', attr: 'FOR' },
+            { id: 'luta', name: 'Luta', attr: 'FOR' },
+            { id: 'acrobacia', name: 'Acrobacia', attr: 'AGI' },
+            { id: 'furtividade', name: 'Furtividade', attr: 'AGI' },
+            { id: 'iniciativa', name: 'Iniciativa', attr: 'AGI' },
+            { id: 'pontaria', name: 'Pontaria', attr: 'AGI' },
+            { id: 'reflexos', name: 'Reflexos', attr: 'AGI' },
+            { id: 'conjuntura', name: 'Conjuntura', attr: 'INT' },
+            { id: 'ciencias', name: 'Ciências', attr: 'INT' },
+            { id: 'investigacao', name: 'Investigação', attr: 'INT' },
+            { id: 'medicina', name: 'Medicina', attr: 'INT' },
+            { id: 'ocultismo', name: 'Ocultismo', attr: 'INT' },
+            { id: 'religiao', name: 'Religião', attr: 'INT' },
+            { id: 'historia', name: 'História', attr: 'INT' },
+            { id: 'rituais', name: 'Rituais', attr: 'INT' },
+            { id: 'artes', name: 'Artes', attr: 'PRE' },
+            { id: 'diplomacia', name: 'Diplomacia', attr: 'PRE' },
+            { id: 'enganacao', name: 'Enganação', attr: 'PRE' },
+            { id: 'intimidacao', name: 'Intimidação', attr: 'PRE' },
+            { id: 'intuicao', name: 'Intuição', attr: 'PRE' },
+            { id: 'percepcao', name: 'Percepção', attr: 'PRE' },
+            { id: 'vontade', name: 'Vontade', attr: 'PRE' },
+            { id: 'divinacao', name: 'Divinação', attr: 'PRE' },
+            { id: 'fortitude', name: 'Fortitude', attr: 'VIG' },
+            { id: 'sobrevivencia', name: 'Sobrevivência', attr: 'VIG' }
+        ];
+
+        let manualFlags = { pv: false, san: false, ca: false };
+
         function switchTab(evt, tabId) {
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(c => c.classList.add('hidden'));
@@ -442,8 +390,139 @@
             val += delta;
             el.value = val;
             
-            // Dispara evento para acionar o salvamento
+            calcularTudo();
             el.dispatchEvent(new Event('input'));
+        }
+
+        // Tabela de Modificadores: Math.floor((Atributo - 10) / 2)
+        function getMod(val) {
+            let num = parseInt(val, 10);
+            if (isNaN(num)) return 0;
+            return Math.floor((num - 10) / 2);
+        }
+
+        function formatMod(mod) {
+            return mod >= 0 ? `+${mod}` : `${mod}`;
+        }
+
+        function marcarManual(tipo) {
+            manualFlags[tipo] = true;
+            localStorage.setItem('manual_' + tipo, 'true');
+        }
+
+        function recalcularPV(forcar = false) {
+            if (forcar) {
+                manualFlags.pv = false;
+                localStorage.removeItem('manual_pv');
+            }
+            if (!manualFlags.pv) {
+                const vigVal = parseInt(document.getElementById('attr-vig-val').value, 10) || 10;
+                const modVig = getMod(vigVal);
+                const pvTotal = 12 + modVig;
+                const elTotal = document.getElementById('vida-total');
+                const elAtual = document.getElementById('vida-atual');
+                
+                if (elTotal) elTotal.value = pvTotal;
+                if (elAtual && (elAtual.value === '' || !manualFlags.pv)) elAtual.value = pvTotal;
+            }
+        }
+
+        function recalcularSAN(forcar = false) {
+            if (forcar) {
+                manualFlags.san = false;
+                localStorage.removeItem('manual_san');
+            }
+            if (!manualFlags.san) {
+                const preVal = parseInt(document.getElementById('attr-pre-val').value, 10) || 10;
+                const modPre = getMod(preVal);
+                const sanTotal = 10 + modPre;
+                const elTotal = document.getElementById('sanidade-total');
+                const elAtual = document.getElementById('sanidade-atual');
+
+                if (elTotal) elTotal.value = sanTotal;
+                if (elAtual && (elAtual.value === '' || !manualFlags.san)) elAtual.value = sanTotal;
+            }
+        }
+
+        function recalcularCA(forcar = false) {
+            if (forcar) {
+                manualFlags.ca = false;
+                localStorage.removeItem('manual_ca');
+            }
+            if (!manualFlags.ca) {
+                const agiVal = parseInt(document.getElementById('attr-agi-val').value, 10) || 10;
+                const modAgi = getMod(agiVal);
+                const equip = parseInt(document.getElementById('ca-equip').value, 10) || 0;
+                const caTotal = 10 + modAgi + equip;
+                const elCA = document.getElementById('ca-val');
+
+                if (elCA) elCA.value = caTotal;
+            }
+        }
+
+        function calcularTudo() {
+            // 1. Modificadores dos Atributos
+            const mods = {
+                FOR: getMod(document.getElementById('attr-for-val').value),
+                AGI: getMod(document.getElementById('attr-agi-val').value),
+                INT: getMod(document.getElementById('attr-int-val').value),
+                PRE: getMod(document.getElementById('attr-pre-val').value),
+                VIG: getMod(document.getElementById('attr-vig-val').value)
+            };
+
+            // Atualiza visualmente os badges de Modificador nos Atributos
+            document.getElementById('mod-for').innerText = `Mod: ${formatMod(mods.FOR)}`;
+            document.getElementById('mod-agi').innerText = `Mod: ${formatMod(mods.AGI)}`;
+            document.getElementById('mod-int').innerText = `Mod: ${formatMod(mods.INT)}`;
+            document.getElementById('mod-pre').innerText = `Mod: ${formatMod(mods.PRE)}`;
+            document.getElementById('mod-vig').innerText = `Mod: ${formatMod(mods.VIG)}`;
+
+            // 2. Status Derivados
+            recalcularPV();
+            recalcularSAN();
+            recalcularCA();
+
+            // 3. Perícias
+            SKILLS.forEach(skill => {
+                const trEl = document.getElementById(`per-${skill.id}-tr`);
+                const outrosEl = document.getElementById(`per-${skill.id}-outros`);
+                const totalEl = document.getElementById(`per-${skill.id}-total`);
+
+                if (totalEl) {
+                    const isTrained = trEl ? trEl.checked : false;
+                    const bonusTreino = isTrained ? 2 : 0;
+                    const outrosBonus = outrosEl ? (parseInt(outrosEl.value, 10) || 0) : 0;
+                    const total = mods[skill.attr] + bonusTreino + outrosBonus;
+
+                    totalEl.innerText = formatMod(total);
+                }
+            });
+        }
+
+        function renderSkills() {
+            const container = document.getElementById('skills-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            SKILLS.forEach(skill => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between input-dark p-1.5 rounded gap-1';
+                div.innerHTML = `
+                    <div class="flex items-center space-x-1.5 min-w-0">
+                        <input type="checkbox" id="per-${skill.id}-tr" class="accent-amber-500 w-3.5 h-3.5 cursor-pointer" onchange="calcularTudo()">
+                        <label for="per-${skill.id}-tr" class="truncate cursor-pointer select-none">
+                            ${skill.name} <span class="text-gray-400 text-[10px]">(${skill.attr})</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center space-x-1 shrink-0">
+                        <span class="text-[9px] text-gray-400">Outros:</span>
+                        <input type="number" id="per-${skill.id}-outros" class="input-dark w-9 text-center rounded py-0.5 font-bold text-xs" placeholder="0" oninput="calcularTudo()">
+                        <span class="text-[9px] text-gray-400 font-bold ml-1">Total:</span>
+                        <span id="per-${skill.id}-total" class="w-7 text-center font-bold text-amber-300 text-xs">+0</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
         }
 
         function updateImagePreview() {
@@ -451,31 +530,56 @@
             const img = document.getElementById('aparencia-img');
             const placeholder = document.getElementById('aparencia-placeholder');
 
-            if (urlInput.value.trim() !== '') {
+            if (urlInput && urlInput.value.trim() !== '') {
                 img.src = urlInput.value;
                 img.classList.remove('hidden');
                 placeholder.classList.add('hidden');
-            } else {
+            } else if (img && placeholder) {
                 img.src = '';
                 img.classList.add('hidden');
                 placeholder.classList.remove('hidden');
             }
         }
 
-        // --- SISTEMA DE SALVAMENTO AUTOMÁTICO ---
+        // --- SALVAMENTO E CARREGAMENTO AUTOMÁTICO ---
         document.addEventListener('input', (e) => {
-            if (e.target.id && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT')) {
+            if (!e.target.id) return;
+            if (e.target.type === 'checkbox') {
+                localStorage.setItem('ficha_lotm_' + e.target.id, e.target.checked);
+            } else if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
                 localStorage.setItem('ficha_lotm_' + e.target.id, e.target.value);
             }
         });
 
+        document.addEventListener('change', (e) => {
+            if (e.target.id && e.target.type === 'checkbox') {
+                localStorage.setItem('ficha_lotm_' + e.target.id, e.target.checked);
+            }
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
+            renderSkills();
+
+            // Restaura estado manual
+            manualFlags.pv = localStorage.getItem('manual_pv') === 'true';
+            manualFlags.san = localStorage.getItem('manual_san') === 'true';
+            manualFlags.ca = localStorage.getItem('manual_ca') === 'true';
+
+            // Carrega valores salvos
             document.querySelectorAll('input, textarea, select').forEach(el => {
-                if (el.id && localStorage.getItem('ficha_lotm_' + el.id) !== null) {
-                    el.value = localStorage.getItem('ficha_lotm_' + el.id);
+                if (!el.id) return;
+                const saved = localStorage.getItem('ficha_lotm_' + el.id);
+                if (saved !== null) {
+                    if (el.type === 'checkbox') {
+                        el.checked = (saved === 'true');
+                    } else {
+                        el.value = saved;
+                    }
                 }
             });
+
             updateImagePreview();
+            calcularTudo();
         });
 
         // --- EXPORTAR E IMPORTAR FICHA (BACKUP JSON) ---
@@ -483,9 +587,10 @@
             const data = {};
             document.querySelectorAll('input, textarea, select').forEach(el => {
                 if (el.id) {
-                    data[el.id] = el.value;
+                    data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
                 }
             });
+            data['manualFlags'] = manualFlags;
 
             const nameInput = document.getElementById('char-personagem');
             const charName = (nameInput && nameInput.value.trim() !== '') ? nameInput.value.trim().replace(/\s+/g, '_') : 'ficha_lotm';
@@ -507,14 +612,26 @@
             reader.onload = function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
+                    if (data.manualFlags) {
+                        manualFlags = data.manualFlags;
+                        Object.keys(manualFlags).forEach(k => localStorage.setItem('manual_' + k, manualFlags[k]));
+                    }
+
                     Object.keys(data).forEach(id => {
+                        if (id === 'manualFlags') return;
                         const el = document.getElementById(id);
                         if (el) {
-                            el.value = data[id];
-                            localStorage.setItem('ficha_lotm_' + id, data[id]);
+                            if (el.type === 'checkbox') {
+                                el.checked = data[id];
+                                localStorage.setItem('ficha_lotm_' + id, data[id]);
+                            } else {
+                                el.value = data[id];
+                                localStorage.setItem('ficha_lotm_' + id, data[id]);
+                            }
                         }
                     });
                     updateImagePreview();
+                    calcularTudo();
                     alert("Ficha carregada com sucesso!");
                 } catch (err) {
                     alert("Erro ao importar o arquivo. Verifique se o arquivo baixado é válido.");
