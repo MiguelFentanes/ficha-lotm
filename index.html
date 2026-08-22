@@ -112,6 +112,18 @@
 <body class="min-h-screen p-2 md:p-6">
 
     <div class="max-w-5xl mx-auto bg-dark-card rounded-lg p-4 md:p-8 relative">
+        
+        <!-- Botões de Backup (Exportar e Importar) -->
+        <div class="flex flex-wrap justify-end gap-2 mb-4">
+            <button type="button" onclick="exportarFicha()" class="btn-stepper px-3 py-1.5 rounded text-xs font-bold flex items-center">
+                <i class="fa-solid fa-download mr-1.5"></i> Exportar Ficha
+            </button>
+            <button type="button" onclick="document.getElementById('import-file').click()" class="btn-stepper px-3 py-1.5 rounded text-xs font-bold flex items-center">
+                <i class="fa-solid fa-upload mr-1.5"></i> Importar Ficha
+            </button>
+            <input type="file" id="import-file" class="hidden" accept=".json" onchange="importarFicha(event)">
+        </div>
+
         <!-- Cabeçalho -->
         <header class="text-center mb-6 border-b border-[#9a783e]/40 pb-4">
             <h1 class="cinzel text-2xl md:text-4xl font-bold gold-gradient-text tracking-wider uppercase mb-1">
@@ -365,11 +377,11 @@
                         <input type="number" id="per-divinacao" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
                     </div>
                     <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Fortitude <span class="text-gray-400 text-[10px]">(PRE)</span></span>
+                        <span>Fortitude <span class="text-gray-400 text-[10px]">(VIG)</span></span>
                         <input type="number" id="per-fortitude" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
                     </div>
                     <div class="flex items-center justify-between input-dark p-2 rounded">
-                        <span>Sobrevivência <span class="text-gray-400 text-[10px]">(PRE)</span></span>
+                        <span>Sobrevivência <span class="text-gray-400 text-[10px]">(VIG)</span></span>
                         <input type="number" id="per-sobrevivencia" class="input-dark w-12 text-center rounded py-0.5 font-bold" placeholder="0">
                     </div>
                 </div>
@@ -465,6 +477,51 @@
             });
             updateImagePreview();
         });
+
+        // --- EXPORTAR E IMPORTAR FICHA (BACKUP JSON) ---
+        function exportarFicha() {
+            const data = {};
+            document.querySelectorAll('input, textarea, select').forEach(el => {
+                if (el.id) {
+                    data[el.id] = el.value;
+                }
+            });
+
+            const nameInput = document.getElementById('char-personagem');
+            const charName = (nameInput && nameInput.value.trim() !== '') ? nameInput.value.trim().replace(/\s+/g, '_') : 'ficha_lotm';
+            
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `${charName}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importarFicha(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    Object.keys(data).forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.value = data[id];
+                            localStorage.setItem('ficha_lotm_' + id, data[id]);
+                        }
+                    });
+                    updateImagePreview();
+                    alert("Ficha carregada com sucesso!");
+                } catch (err) {
+                    alert("Erro ao importar o arquivo. Verifique se o arquivo baixado é válido.");
+                }
+            };
+            reader.readAsText(file);
+        }
 
         // Registrar Service Worker para PWA (Offline)
         if ('serviceWorker' in navigator) {
