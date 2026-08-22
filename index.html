@@ -18,6 +18,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- html2pdf.js para geração de PDF no navegador -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- pdf-lib para leitura e manipulação de metadados do PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Fauna+One&display=swap');
@@ -127,9 +129,9 @@
                 <i class="fa-solid fa-download mr-1.5"></i> Exportar JSON
             </button>
             <button type="button" onclick="document.getElementById('import-file').click()" class="btn-stepper px-3 py-1.5 rounded text-xs font-bold flex items-center">
-                <i class="fa-solid fa-upload mr-1.5"></i> Importar JSON
+                <i class="fa-solid fa-upload mr-1.5"></i> Importar Ficha
             </button>
-            <input type="file" id="import-file" class="hidden" accept=".json" onchange="importarFicha(event)">
+            <input type="file" id="import-file" class="hidden" accept=".json, .pdf" onchange="importarFicha(event)">
         </div>
 
         <!-- Cabeçalho -->
@@ -543,6 +545,42 @@
             }
         }
 
+        // --- MANIPULAÇÃO DE DADOS DA FICHA ---
+        function obterDadosFicha() {
+            const data = {};
+            document.querySelectorAll('input, textarea, select').forEach(el => {
+                if (el.id) {
+                    data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+                }
+            });
+            data['manualFlags'] = manualFlags;
+            return data;
+        }
+
+        function aplicarDadosFicha(data) {
+            if (data.manualFlags) {
+                manualFlags = data.manualFlags;
+                Object.keys(manualFlags).forEach(k => localStorage.setItem('manual_' + k, manualFlags[k]));
+            }
+
+            Object.keys(data).forEach(id => {
+                if (id === 'manualFlags') return;
+                const el = document.getElementById(id);
+                if (el) {
+                    if (el.type === 'checkbox') {
+                        el.checked = data[id];
+                        localStorage.setItem('ficha_lotm_' + id, data[id]);
+                    } else {
+                        el.value = data[id];
+                        localStorage.setItem('ficha_lotm_' + id, data[id]);
+                    }
+                }
+            });
+            
+            updateImagePreview();
+            calcularTudo();
+        }
+
         // --- GERAÇÃO DE PDF E COMPARTILHAMENTO ---
         function prepararVisaoCompleta() {
             const contents = document.querySelectorAll('.tab-content');
@@ -572,6 +610,9 @@
 
             prepararVisaoCompleta();
 
+            const fichaData = obterDadosFicha();
+            const jsonStringCodificada = encodeURIComponent(JSON.stringify(fichaData));
+
             const opt = {
                 margin:       [0.2, 0.2, 0.2, 0.2],
                 filename:     `${charName}.pdf`,
@@ -580,7 +621,13 @@
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
 
-            html2pdf().set(opt).from(element).save().then(() => {
+            // Injeta o JSON codificado nos metadados (Subject) do documento PDF
+            html2pdf().set(opt).from(element).toPdf().get('pdf').then((pdf) => {
+                pdf.setProperties({
+                    title: `Ficha RPG - ${charName}`,
+                    subject: jsonStringCodificada
+                });
+            }).save().then(() => {
                 restaurarVisaoAbas();
             }).catch(() => {
                 restaurarVisaoAbas();
@@ -597,7 +644,6 @@
 
             const element = document.getElementById('ficha-container');
 
-            // 1. Tenta compartilhamento nativo do arquivo PDF (Celular/Web Share API)
             if (navigator.canShare && typeof html2pdf !== 'undefined') {
                 try {
                     prepararVisaoCompleta();
@@ -629,7 +675,6 @@
                 }
             }
 
-            // 2. Fallback: Envia mensagem formatada direta para o WhatsApp com resumo dos status
             const texto = `*Ficha de RPG - Lord of the Mysteries*%0A` +
                           `👤 *Personagem:* ${encodeURIComponent(charName)}%0A` +
                           `🔮 *Sequência:* ${encodeURIComponent(seq)}%0A` +
@@ -639,7 +684,7 @@
             window.open(`https://api.whatsapp.com/send?text=${texto}`, '_blank');
         }
 
-        // --- SALVAMENTO E CARREGAMENTO AUTOMÁTICO ---
+        // --- SALVAMENTO E CARREGAMENTO AUTOMÁTICO NO NAVEGADOR ---
         document.addEventListener('input', (e) => {
             if (!e.target.id) return;
             if (e.target.type === 'checkbox') {
@@ -678,16 +723,9 @@
             calcularTudo();
         });
 
-        // --- EXPORTAR E IMPORTAR FICHA (JSON) ---
+        // --- EXPORTAR E IMPORTAR FICHA (JSON OU PDF) ---
         function exportarFicha() {
-            const data = {};
-            document.querySelectorAll('input, textarea, select').forEach(el => {
-                if (el.id) {
-                    data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
-                }
-            });
-            data['manualFlags'] = manualFlags;
-
+            const data = obterDadosFicha();
             const nameInput = document.getElementById('char-personagem');
             const charName = (nameInput && nameInput.value.trim() !== '') ? nameInput.value.trim().replace(/\s+/g, '_') : 'ficha_lotm';
             
@@ -700,40 +738,47 @@
             downloadAnchor.remove();
         }
 
-        function importarFicha(event) {
+        async function importarFicha(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (data.manualFlags) {
-                        manualFlags = data.manualFlags;
-                        Object.keys(manualFlags).forEach(k => localStorage.setItem('manual_' + k, manualFlags[k]));
+            try {
+                if (file.name.endsWith('.pdf') || file.type === 'application/pdf') {
+                    // Tenta extrair o JSON dos metadados do PDF com pdf-lib
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+                    const subjectMetadata = pdfDoc.getSubject();
+
+                    if (!subjectMetadata) {
+                        alert("Este arquivo PDF não contém dados de ficha embutidos.");
+                        return;
                     }
 
-                    Object.keys(data).forEach(id => {
-                        if (id === 'manualFlags') return;
-                        const el = document.getElementById(id);
-                        if (el) {
-                            if (el.type === 'checkbox') {
-                                el.checked = data[id];
-                                localStorage.setItem('ficha_lotm_' + id, data[id]);
-                            } else {
-                                el.value = data[id];
-                                localStorage.setItem('ficha_lotm_' + id, data[id]);
-                            }
+                    const data = JSON.parse(decodeURIComponent(subjectMetadata));
+                    aplicarDadosFicha(data);
+                    alert("Ficha importada com sucesso a partir do arquivo PDF!");
+
+                } else if (file.name.endsWith('.json') || file.type === 'application/json') {
+                    // Importação padrão de arquivo JSON
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            aplicarDadosFicha(data);
+                            alert("Ficha importada com sucesso do arquivo JSON!");
+                        } catch (err) {
+                            alert("Erro ao ler o arquivo JSON.");
                         }
-                    });
-                    updateImagePreview();
-                    calcularTudo();
-                    alert("Ficha carregada com sucesso!");
-                } catch (err) {
-                    alert("Erro ao importar o arquivo. Verifique se o arquivo baixado é válido.");
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert("Por favor, selecione um arquivo válido (.pdf ou .json).");
                 }
-            };
-            reader.readAsText(file);
+            } catch (err) {
+                alert("Erro ao processar o arquivo. Certifique-se de que é uma ficha válida.");
+            } finally {
+                event.target.value = ''; // Limpa a seleção para permitir reimportar se necessário
+            }
         }
 
         if ('serviceWorker' in navigator) {
