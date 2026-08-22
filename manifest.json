@@ -1,0 +1,22 @@
+{
+  "name": "Ficha Lord of the Mysteries",
+  "short_name": "Ficha LotM",
+  "description": "Ficha interativa e instalável para Lord of the Mysteries RPG.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#080a0f",
+  "theme_color": "#080a0f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3502/3502685.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3502/3502685.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

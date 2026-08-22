@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha Interativa - Lord of the Mysteries RPG</title>
+
+    <!-- PWA / Suporte para Instalação no Celular -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#080a0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Ficha LotM">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Font Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Fauna+One&display=swap');
+
+        body {
+            font-family: 'Fauna One', serif;
+            background-color: #080a0f;
+            color: #dcd0bf;
+        }
+
+        .cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        .bg-dark-card {
+            background-color: rgba(15, 20, 32, 0.95);
+            border: 1px solid #9a783e;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.85);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fceabb 0%, #f8b500 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-dark {
+            background: rgba(8, 12, 19, 0.9);
+            border: 1px solid #4a3a20;
+            color: #f3e5ab;
+            transition: all 0.2s ease;
+        }
+
+        .input-dark:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Removendo setas nativas do input number */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .tab-btn {
+            border-bottom: 2px solid transparent;
+            color: #8a7350;
+            transition: all 0.2s ease;
+        }
+        .tab-btn.active {
+            border-bottom-color: #d4af37;
+            color: #fceabb;
+            background-color: rgba(212, 175, 55, 0.12);
+        }
+
+        .btn-stepper {
+            background-color: rgba(168, 131, 68, 0.2);
+            border: 1px solid #8a7350;
+            color: #fceabb;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+        .btn-stepper:hover {
+            background-color: rgba(212, 175, 55, 0.4);
+            border-color: #d4af37;
+            transform: translateY(-1px);
+        }
+        .btn-stepper:active {
+            transform: translateY(0) scale(0.94);
+        }
+
+        /* Estilos de Cores de Atributos */
+        .attr-FOR { border-color: rgba(239, 68, 68, 0.6); }
+        .attr-FOR .attr-badge { background-color: rgba(127, 29, 29, 0.8); color: #fca5a5; border-color: #ef4444; }
+
+        .attr-AGI { border-color: rgba(245, 158, 11, 0.6); }
+        .attr-AGI .attr-badge { background-color: rgba(120, 53, 15, 0.8); color: #fde047; border-color: #f59e0b; }
+
+        .attr-INT { border-color: rgba(6, 182, 212, 0.6); }
+        .attr-INT .attr-badge { background-color: rgba(22, 78, 99, 0.8); color: #67e8f9; border-color: #06b6d4; }
+
+        .attr-PRE { border-color: rgba(168, 85, 247, 0.6); }
+        .attr-PRE .attr-badge { background-color: rgba(88, 28, 135, 0.8); color: #e9d5ff; border-color: #a855f7; }
+
+        .attr-VIG { border-color: rgba(16, 185, 129, 0.6); }
+        .attr-VIG .attr-badge { background-color: rgba(6, 78, 59, 0.8); color: #6ee7b7; border-color: #10b981; }
+    </style>
+</head>
+<body class="min-h-screen p-2 md:p-6">
+
+    <div class="max-w-5xl mx-auto bg-dark-card rounded-lg p-4 md:p-8 relative">
+        <!-- Cabeçalho -->
+        <header class="text-center mb-8 border-b border-[#9a783e]/40 pb-6">
+            <h1 class="cinzel text-2xl md:text-4xl font-bold gold-gradient-text tracking-wider uppercase mb-2">
+                <i class="fa-solid fa-eye mr-2"></i> Lord of the Mysteries
+            </h1>
+            <p class="text-xs md:text-sm text-[#a88d58] italic">Ficha Interativa de Personagem</p>
+        </header>
+
+        <!-- Informações Básicas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div>
+                <label for="char-name" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Nome do Personagem</label>
+                <input type="text" id="char-name" class="input-dark w-full p-2 rounded text-sm" placeholder="Ex: Klein Moretti">
+            </div>
+            <div>
+                <label for="char-sequence" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Sequência / Caminho</label>
+                <input type="text" id="char-sequence" class="input-dark w-full p-2 rounded text-sm" placeholder="Ex: Sequência 9 - Louco">
+            </div>
+            <div>
+                <label for="char-player" class="block text-xs uppercase text-[#a88d58] mb-1 font-bold">Jogador</label>
+                <input type="text" id="char-player" class="input-dark w-full p-2 rounded text-sm" placeholder="Seu Nome">
+            </div>
+        </div>
+
+        <!-- Abas Principais -->
+        <div class="flex border-b border-[#4a3a20] mb-6">
+            <button class="tab-btn active px-4 py-2 text-sm font-bold uppercase rounded-t tracking-wider" onclick="switchTab(event, 'tab-atributos')">
+                <i class="fa-solid fa-shield-halved mr-1"></i> Atributos
+            </button>
+            <button class="tab-btn px-4 py-2 text-sm font-bold uppercase rounded-t tracking-wider" onclick="switchTab(event, 'tab-habilidades')">
+                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Habilidades
+            </button>
+            <button class="tab-btn px-4 py-2 text-sm font-bold uppercase rounded-t tracking-wider" onclick="switchTab(event, 'tab-anotacoes')">
+                <i class="fa-solid fa-book-open mr-1"></i> Anotações
+            </button>
+        </div>
+
+        <!-- Conteúdo das Abas -->
+        <div id="tab-atributos" class="tab-content">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Atributo: Força -->
+                <div class="input-dark p-3 rounded border attr-FOR flex justify-between items-center">
+                    <div>
+                        <span class="attr-badge px-2 py-0.5 rounded text-xs font-bold border mr-2">FOR</span>
+                        <span class="font-bold text-sm">Força</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button type="button" class="btn-stepper w-7 h-7 rounded font-bold" onclick="changeValue('attr-for-val', -1)">-</button>
+                        <input type="number" id="attr-for-val" value="0" class="input-dark w-12 text-center py-1 rounded font-bold">
+                        <button type="button" class="btn-stepper w-7 h-7 rounded font-bold" onclick="changeValue('attr-for-val', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Atributo: Agilidade -->
+                <div class="input-dark p-3 rounded border attr-AGI flex justify-between items-center">
+                    <div>
+                        <span class="attr-badge px-2 py-0.5 rounded text-xs font-bold border mr-2">AGI</span>
+                        <span class="font-bold text-sm">Agilidade</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button type="button" class="btn-stepper w-7 h-7 rounded font-bold" onclick="changeValue('attr-agi-val', -1)">-</button>
+                        <input type="number" id="attr-agi-val" value="0" class="input-dark w-12 text-center py-1 rounded font-bold">
+                        <button type="button" class="btn-stepper w-7 h-7 rounded font-bold" onclick="changeValue('attr-agi-val', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Atributo: Inteligência -->
+                <div class="input-dark p-3 rounded border attr-INT flex justify-between items-center">
+                    <div>
+                        <span class="attr-badge px-2 py-0.5 rounded text-xs font-bold border mr-2">INT</span>
+                        <span class="font-bold text-sm">Inteligência</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button type="button" class="btn-stepper w-7 h-7 rounded font-bold" onclick="changeValue('attr-int-val', -1)">-</button>
+                        <input type="number" id="attr-int-val" value="0" class="input-dark w-12 text-center py-1 rounded font-bold">
+                        <button type="button" class="btn-stepper w-7 h-7 rounded font-bold" onclick="changeValue('attr-int-val', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Atributo: Presença -->
+                <div class="input-dark p-3 rounded border attr-PRE flex justify-between items-center">
+                    <div>
+                        <span class="attr-badge px-2 py-0.5 rounded text-xs font-bold border mr-2">PRE</span>
+                        <span class="font-bold text-sm">Presença</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button type="button" class="btn-stepper w-7 h-7 rounded font-bold" onclick="changeValue('attr-pre-val', -1)">-</button>
+                        <input type="number" id="attr-pre-val" value="0" class="input-dark w-12 text-center py-1 rounded font-bold">
+                        <button type="button" class="btn-stepper w-7 h-7 rounded font-bold" onclick="changeValue('attr-pre-val', 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Atributo: Vigor -->
+                <div class="input-dark p-3 rounded border attr-VIG flex justify-between items-center md:col-span-2">
+                    <div>
+                        <span class="attr-badge px-2 py-0.5 rounded text-xs font-bold border mr-2">VIG</span>
+                        <span class="font-bold text-sm">Vigor</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button type="button" class="btn-stepper w-7 h-7 rounded font-bold" onclick="changeValue('attr-vig-val', -1)">-</button>
+                        <input type="number" id="attr-vig-val" value="0" class="input-dark w-12 text-center py-1 rounded font-bold">
+                        <button type="button" class="btn-stepper w-7 h-7 rounded font-bold" onclick="changeValue('attr-vig-val', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-habilidades" class="tab-content hidden">
+            <label for="habilidades-text" class="block text-xs uppercase text-[#a88d58] mb-2 font-bold">Habilidades e Poderes Beyonder</label>
+            <textarea id="habilidades-text" rows="8" class="input-dark w-full p-3 rounded text-sm" placeholder="Liste suas habilidades extraordinárias aqui..."></textarea>
+        </div>
+
+        <div id="tab-anotacoes" class="tab-content hidden">
+            <label for="anotacoes-text" class="block text-xs uppercase text-[#a88d58] mb-2 font-bold">Inventário e Anotações Gerais</label>
+            <textarea id="anotacoes-text" rows="8" class="input-dark w-full p-3 rounded text-sm" placeholder="Itens, selos, contatos e pistas..."></textarea>
+        </div>
+    </div>
+
+    <!-- Script de Alternância de Abas, Ajuste de Valores e Auto-Save -->
+    <script>
+        function switchTab(evt, tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.add('hidden'));
+
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(t => t.classList.remove('active'));
+
+            document.getElementById(tabId).classList.remove('hidden');
+            evt.currentTarget.classList.add('active');
+        }
+
+        function changeValue(inputId, delta) {
+            const el = document.getElementById(inputId);
+            if (!el) return;
+            let val = parseInt(el.value, 10) || 0;
+            val += delta;
+            el.value = val;
+            
+            // Dispara evento para acionar o salvamento
+            el.dispatchEvent(new Event('input'));
+        }
+
+        // --- SISTEMA DE SALVAMENTO AUTOMÁTICO ---
+        document.addEventListener('input', (e) => {
+            if (e.target.id && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT')) {
+                localStorage.setItem('ficha_lotm_' + e.target.id, e.target.value);
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('input, textarea, select').forEach(el => {
+                if (el.id && localStorage.getItem('ficha_lotm_' + el.id) !== null) {
+                    el.value = localStorage.getItem('ficha_lotm_' + el.id);
+                }
+            });
+        });
+
+        // Registrar Service Worker para PWA (Offline)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+    </script>
+</body>
+</html>
